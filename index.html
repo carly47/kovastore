@@ -187,26 +187,7 @@
     main {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 24px 16px 100px;
-    }
-
-    .section-title {
-      text-align: center;
-      margin: 30px 0 20px;
-      font-size: 0.9rem;
-      letter-spacing: 3px;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-    .section-badge {
-      display: inline-block;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      padding: 4px 16px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      color: #ccc;
-      margin-bottom: 8px;
+      padding: 40px 16px 100px;
     }
 
     .grid {
@@ -263,6 +244,29 @@
       margin-top: 4px;
     }
 
+    /* Selector de tamaño / variante */
+    .variant-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .variant-row label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .variant-select {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #fff;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      outline: none;
+    }
+
     .qty-stepper {
       display: flex;
       align-items: center;
@@ -308,6 +312,7 @@
       color: #111;
     }
 
+    /* Modal de Detalle de Producto */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -389,6 +394,7 @@
       cursor: pointer;
     }
 
+    /* Cart */
     .cart-overlay {
       position: fixed;
       inset: 0;
@@ -585,17 +591,7 @@
 </section>
 
 <main id="catalogo">
-  <div class="section-title">
-    <div class="section-badge">20 ml</div>
-    <div>Fragancias · Presentación 20 ml</div>
-  </div>
-  <div class="grid" id="grid-20"></div>
-
-  <div class="section-title" style="margin-top:50px">
-    <div class="section-badge">50 ml</div>
-    <div>Fragancias · Presentación 50 ml</div>
-  </div>
-  <div class="grid" id="grid-50"></div>
+  <div class="grid" id="grid-products"></div>
 
   <p class="disclaimer">
     Los productos mostrados son fragancias de inspiración; las marcas mencionadas se utilizan únicamente para identificar la referencia olfativa.
@@ -611,6 +607,12 @@
       <div id="modal-title" class="modal-title"></div>
       <div id="modal-ref" class="modal-ref"></div>
       <div id="modal-desc" class="modal-desc"></div>
+      
+      <div class="variant-row" style="margin-top: 6px;">
+        <label>Tamaño:</label>
+        <select class="variant-select" id="modal-variant-select" onchange="onModalVariantChange()"></select>
+      </div>
+
       <div id="modal-price" class="modal-price"></div>
       
       <div class="qty-stepper" style="margin-top: 6px;">
@@ -656,33 +658,201 @@
   const RATE_EUR_CUP = 840; // 1 EUR = 840 CUP
   const USD_TO_EUR = RATE_CUP / RATE_EUR_CUP;
 
+  // Catálogo de Productos con Variantes de Tamaño
   const products = [
-    // 20 ml
-    { id: 1,  name: "1 Million",                    ref: "Gold Digger",           size: "20 ml", priceUSD: 18, img: "img/img-002.png", desc: "Una fragancia audaz con notas amaderadas y toques de cuero y especias, perfecta para destacar en la noche." },
-    { id: 2,  name: "Tom Ford F'n Fabulous",         ref: "F'n Marvelous",         size: "20 ml", priceUSD: 22, img: "img/img-003.png", desc: "Un aroma cuero-oriental sofisticado y exclusivo, enriquecido con almendra amarga y haba tonka." },
-    { id: 3,  name: "Sauvage Elixir",                ref: "Savage Spell",          size: "20 ml", priceUSD: 20, img: "img/img-004.png", desc: "Concentración extraordinaria de notas especiadas, lavanda fresca y un fondo de maderas ricas." },
-    { id: 4,  name: "Christian Clive Blonde Amber",  ref: "Goldie Luxe",           size: "20 ml", priceUSD: 25, img: "img/goldie_luxe.jpg", desc: "Ámbar cálido, notas frutales y un toque de ron que evocan elegancia atemporal." },
-    { id: 5,  name: "Creed Queen of Silk",           ref: "Sew Over You",          size: "20 ml", priceUSD: 24, img: "img/sew_over_you.jpg", desc: "Una esencia envolvente con flores blancas, vainilla suave y notas amaderadas delicadas." },
-    { id: 6,  name: "YSL Libre",                     ref: "Libre-Ate Me",          size: "20 ml", priceUSD: 19, img: "img/img-005.png", desc: "El equilibrio perfecto entre la lavanda francesa y la flor de azahar marroquí." },
-    { id: 7,  name: "JPG Le Male Elixir",            ref: "Alpha Elixir",          size: "20 ml", priceUSD: 18, img: "img/alpha_elixir.jpg", desc: "Intenso y sensual con notas dulces de haba tonka, menta fresca y benjuí." },
-    { id: 8,  name: "Tom Ford Electric Cherry",      ref: "Cherry Spark",          size: "20 ml", priceUSD: 23, img: "img/img-006.png", desc: "Cereza ácida combinada con jazmín dulce y pimienta rosada vibrante." },
-    { id: 9,  name: "Bleu de Chanel",                ref: "Azure Depth",           size: "20 ml", priceUSD: 20, img: "img/img-007.png", desc: "Una fragancia aromática y amaderada de carácter independiente y elegante." },
-
-    // 50 ml
-    { id: 10, name: "Azzaro Most Wanted",            ref: "Wanted Dead or Adored", size: "50 ml", priceUSD: 35, img: "img/img-010.png", desc: "Un aroma amaderado oriental de alta intensidad con cardamomo, toffee y madera de ámbar." },
-    { id: 11, name: "YSL Y",                         ref: "Why Not",               size: "50 ml", priceUSD: 32, img: "img/img-011.png", desc: "Aroma fresco y profundo con notas de bergamota, salvia y madera de cedro." },
-    { id: 12, name: "JPG Ultra Male",                ref: "Alpha Noir",            size: "50 ml", priceUSD: 34, img: "img/img-012.png", desc: "Una explosión de pera dulce, lavanda negra y vainilla amaderada." },
-    { id: 13, name: "Viktor Rolf Spicebomb Extreme", ref: "Spice to Meet You",     size: "50 ml", priceUSD: 33, img: "img/img-013.png", desc: "Combinación explosiva de especias cálidas, comino, canela y tabaco rico." },
-    { id: 14, name: "Tom Ford Ombré Leather",        ref: "Leather Late Than Never", size: "50 ml", priceUSD: 38, img: "img/img-014.png", desc: "Cuero texturizado, cardamomo y jazmín que proyectan libertad y profundidad." },
-    { id: 15, name: "Born in Roma Intense",          ref: "When in Roma",          size: "50 ml", priceUSD: 36, img: "img/img-015.png", desc: "Un homenaje moderno con notas de vainilla magnética y jazmín solar." },
-    { id: 16, name: "YSL Libre",                     ref: "Libre-Ate Me",          size: "50 ml", priceUSD: 34, img: "img/img-016.png", desc: "Presentación de 50 ml de esta fragancia floral y audaz con alta fijación." },
-    { id: 17, name: "Ex Nihilo Blue Talisman",       ref: "Ya Blue Me Away",       size: "50 ml", priceUSD: 40, img: "img/img-017.png", desc: "Pera, bergamota, flor de azahar y maderas que crean un amuleto olfativo único." },
-    { id: 18, name: "Acqua di Giò Profumo",          ref: "Holy Ship You Clean Up Nice", size: "50 ml", priceUSD: 35, img: "img/holy_ship.jpg", desc: "Frescura marina combinada con la profundidad del incienso y el pachulí." },
+    { 
+      id: 1,  
+      name: "1 Million", 
+      ref: "Gold Digger", 
+      img: "img/img-002.png", 
+      desc: "Una fragancia audaz con notas amaderadas y toques de cuero y especias, perfecta para destacar en la noche.",
+      variants: [
+        { size: "20 ml", priceUSD: 18 },
+        { size: "50 ml", priceUSD: 30 }
+      ]
+    },
+    { 
+      id: 2,  
+      name: "Tom Ford F'n Fabulous", 
+      ref: "F'n Marvelous", 
+      img: "img/img-003.png", 
+      desc: "Un aroma cuero-oriental sofisticado y exclusivo, enriquecido con almendra amarga y haba tonka.",
+      variants: [
+        { size: "20 ml", priceUSD: 22 },
+        { size: "50 ml", priceUSD: 38 }
+      ]
+    },
+    { 
+      id: 3,  
+      name: "Sauvage Elixir", 
+      ref: "Savage Spell", 
+      img: "img/img-004.png", 
+      desc: "Concentración extraordinaria de notas especiadas, lavanda fresca y un fondo de maderas ricas.",
+      variants: [
+        { size: "20 ml", priceUSD: 20 },
+        { size: "50 ml", priceUSD: 35 }
+      ]
+    },
+    { 
+      id: 4,  
+      name: "Christian Clive Blonde Amber", 
+      ref: "Goldie Luxe", 
+      img: "img/goldie_luxe.jpg", 
+      desc: "Ámbar cálido, notas frutales y un toque de ron que evocan elegancia atemporal.",
+      variants: [
+        { size: "20 ml", priceUSD: 25 },
+        { size: "50 ml", priceUSD: 42 }
+      ]
+    },
+    { 
+      id: 5,  
+      name: "Creed Queen of Silk", 
+      ref: "Sew Over You", 
+      img: "img/sew_over_you.jpg", 
+      desc: "Una esencia envolvente con flores blancas, vainilla suave y notas amaderadas delicadas.",
+      variants: [
+        { size: "20 ml", priceUSD: 24 },
+        { size: "50 ml", priceUSD: 40 }
+      ]
+    },
+    { 
+      id: 6,  
+      name: "YSL Libre", 
+      ref: "Libre-Ate Me", 
+      img: "img/img-005.png", 
+      desc: "El equilibrio perfecto entre la lavanda francesa y la flor de azahar marroquí.",
+      variants: [
+        { size: "20 ml", priceUSD: 19 },
+        { size: "50 ml", priceUSD: 34 }
+      ]
+    },
+    { 
+      id: 7,  
+      name: "JPG Le Male Elixir", 
+      ref: "Alpha Elixir", 
+      img: "img/alpha_elixir.jpg", 
+      desc: "Intenso y sensual con notas dulces de haba tonka, menta fresca y benjuí.",
+      variants: [
+        { size: "20 ml", priceUSD: 18 },
+        { size: "50 ml", priceUSD: 32 }
+      ]
+    },
+    { 
+      id: 8,  
+      name: "Tom Ford Electric Cherry", 
+      ref: "Cherry Spark", 
+      img: "img/img-006.png", 
+      desc: "Cereza ácida combinada con jazmín dulce y pimienta rosada vibrante.",
+      variants: [
+        { size: "20 ml", priceUSD: 23 },
+        { size: "50 ml", priceUSD: 38 }
+      ]
+    },
+    { 
+      id: 9,  
+      name: "Bleu de Chanel", 
+      ref: "Azure Depth", 
+      img: "img/img-007.png", 
+      desc: "Una fragancia aromática y amaderada de carácter independiente y elegante.",
+      variants: [
+        { size: "20 ml", priceUSD: 20 },
+        { size: "50 ml", priceUSD: 35 }
+      ]
+    },
+    { 
+      id: 10, 
+      name: "Azzaro Most Wanted", 
+      ref: "Wanted Dead or Adored", 
+      img: "img/img-010.png", 
+      desc: "Un aroma amaderado oriental de alta intensidad con cardamomo, toffee y madera de ámbar.",
+      variants: [
+        { size: "20 ml", priceUSD: 20 },
+        { size: "50 ml", priceUSD: 35 }
+      ]
+    },
+    { 
+      id: 11, 
+      name: "YSL Y", 
+      ref: "Why Not", 
+      img: "img/img-011.png", 
+      desc: "Aroma fresco y profundo con notas de bergamota, salvia y madera de cedro.",
+      variants: [
+        { size: "20 ml", priceUSD: 18 },
+        { size: "50 ml", priceUSD: 32 }
+      ]
+    },
+    { 
+      id: 12, 
+      name: "JPG Ultra Male", 
+      ref: "Alpha Noir", 
+      img: "img/img-012.png", 
+      desc: "Una explosión de pera dulce, lavanda negra y vainilla amaderada.",
+      variants: [
+        { size: "20 ml", priceUSD: 19 },
+        { size: "50 ml", priceUSD: 34 }
+      ]
+    },
+    { 
+      id: 13, 
+      name: "Viktor Rolf Spicebomb Extreme", 
+      ref: "Spice to Meet You", 
+      img: "img/img-013.png", 
+      desc: "Combinación explosiva de especias cálidas, comino, canela y tabaco rico.",
+      variants: [
+        { size: "20 ml", priceUSD: 19 },
+        { size: "50 ml", priceUSD: 33 }
+      ]
+    },
+    { 
+      id: 14, 
+      name: "Tom Ford Ombré Leather", 
+      ref: "Leather Late Than Never", 
+      img: "img/img-014.png", 
+      desc: "Cuero texturizado, cardamomo y jazmín que proyectan libertad y profundidad.",
+      variants: [
+        { size: "20 ml", priceUSD: 22 },
+        { size: "50 ml", priceUSD: 38 }
+      ]
+    },
+    { 
+      id: 15, 
+      name: "Born in Roma Intense", 
+      ref: "When in Roma", 
+      img: "img/img-015.png", 
+      desc: "Un homenaje moderno con notas de vainilla magnética y jazmín solar.",
+      variants: [
+        { size: "20 ml", priceUSD: 21 },
+        { size: "50 ml", priceUSD: 36 }
+      ]
+    },
+    { 
+      id: 17, 
+      name: "Ex Nihilo Blue Talisman", 
+      ref: "Ya Blue Me Away", 
+      img: "img/img-017.png", 
+      desc: "Pera, bergamota, flor de azahar y maderas que crean un amuleto olfativo único.",
+      variants: [
+        { size: "20 ml", priceUSD: 24 },
+        { size: "50 ml", priceUSD: 40 }
+      ]
+    },
+    { 
+      id: 18, 
+      name: "Acqua di Giò Profumo", 
+      ref: "Holy Ship You Clean Up Nice", 
+      img: "img/holy_ship.jpg", 
+      desc: "Frescura marina combinada con la profundidad del incienso y el pachulí.",
+      variants: [
+        { size: "20 ml", priceUSD: 20 },
+        { size: "50 ml", priceUSD: 35 }
+      ]
+    }
   ];
 
   let currency = "USD";
   let cart = [];
   let tempQuantities = {}; 
+  let tempVariants = {}; // Guarda el índice del tamaño seleccionado
   let currentModalProductId = null;
   let currentModalQty = 1;
 
@@ -697,24 +867,39 @@
   }
 
   function renderProducts() {
-    const grid20 = document.getElementById("grid-20");
-    const grid50 = document.getElementById("grid-50");
-    grid20.innerHTML = "";
-    grid50.innerHTML = "";
+    const grid = document.getElementById("grid-products");
+    grid.innerHTML = "";
 
     products.forEach(p => {
       if (!tempQuantities[p.id]) tempQuantities[p.id] = 1;
+      if (tempVariants[p.id] === undefined) tempVariants[p.id] = 0;
+
+      const currentVariantIdx = tempVariants[p.id];
+      const selectedVariant = p.variants[currentVariantIdx];
 
       const card = document.createElement("div");
       card.className = "product-card";
       card.onclick = () => openModal(p.id);
 
+      // Generar opciones del desplegable
+      const variantOptionsHTML = p.variants.map((v, idx) => 
+        `<option value="${idx}" ${idx === currentVariantIdx ? 'selected' : ''}>${v.size}</option>`
+      ).join("");
+
       card.innerHTML = `
         <img class="product-img" src="${p.img}" alt="${p.name}" loading="lazy" />
         <div class="product-body">
           <div class="product-name">${p.name}</div>
-          <div class="product-ref">${p.ref} · ${p.size}</div>
-          <div class="product-price">${formatPrice(p.priceUSD)}</div>
+          <div class="product-ref">${p.ref}</div>
+          
+          <div class="variant-row" onclick="event.stopPropagation()">
+            <label>Tamaño:</label>
+            <select class="variant-select" onchange="changeCardVariant(${p.id}, this.value)">
+              ${variantOptionsHTML}
+            </select>
+          </div>
+
+          <div class="product-price" id="price-val-${p.id}">${formatPrice(selectedVariant.priceUSD)}</div>
           
           <div class="qty-stepper" onclick="event.stopPropagation()">
             <button onclick="changeCardQty(${p.id}, -1)">-</button>
@@ -725,9 +910,15 @@
           <button class="add-btn" onclick="event.stopPropagation(); addToCart(${p.id})">Agregar al carrito</button>
         </div>
       `;
-      if (p.size === "20 ml") grid20.appendChild(card);
-      else grid50.appendChild(card);
+      grid.appendChild(card);
     });
+  }
+
+  function changeCardVariant(id, variantIdx) {
+    tempVariants[id] = parseInt(variantIdx);
+    const p = products.find(x => x.id === id);
+    const selectedVariant = p.variants[tempVariants[id]];
+    document.getElementById(`price-val-${id}`).textContent = formatPrice(selectedVariant.priceUSD);
   }
 
   function changeCardQty(id, delta) {
@@ -735,6 +926,7 @@
     document.getElementById(`qty-val-${id}`).textContent = tempQuantities[id];
   }
 
+  // ========== MODAL FUNCTIONS ==========
   function openModal(id) {
     const p = products.find(x => x.id === id);
     if (!p) return;
@@ -742,14 +934,38 @@
     currentModalProductId = id;
     currentModalQty = tempQuantities[id] || 1;
 
+    const currentVariantIdx = tempVariants[id] || 0;
+    const selectedVariant = p.variants[currentVariantIdx];
+
     document.getElementById("modal-img").src = p.img;
     document.getElementById("modal-title").textContent = p.name;
-    document.getElementById("modal-ref").textContent = `${p.ref} · ${p.size}`;
+    document.getElementById("modal-ref").textContent = p.ref;
     document.getElementById("modal-desc").textContent = p.desc;
-    document.getElementById("modal-price").textContent = formatPrice(p.priceUSD);
+    
+    // Configurar desplegable del modal
+    const modalSelect = document.getElementById("modal-variant-select");
+    modalSelect.innerHTML = p.variants.map((v, idx) => 
+      `<option value="${idx}" ${idx === currentVariantIdx ? 'selected' : ''}>${v.size}</option>`
+    ).join("");
+
+    document.getElementById("modal-price").textContent = formatPrice(selectedVariant.priceUSD);
     document.getElementById("modal-qty").textContent = currentModalQty;
 
     document.getElementById("modal-overlay").classList.add("open");
+  }
+
+  function onModalVariantChange() {
+    if (!currentModalProductId) return;
+    const p = products.find(x => x.id === currentModalProductId);
+    const modalSelect = document.getElementById("modal-variant-select");
+    const variantIdx = parseInt(modalSelect.value);
+    
+    tempVariants[currentModalProductId] = variantIdx;
+    const selectedVariant = p.variants[variantIdx];
+    document.getElementById("modal-price").textContent = formatPrice(selectedVariant.priceUSD);
+    
+    // Actualizar también la tarjeta en el fondo
+    renderProducts();
   }
 
   function closeModal(e) {
@@ -780,14 +996,25 @@
     }
   }
 
+  // ========== CART FUNCTIONS ==========
   function addToCart(id) {
+    const p = products.find(x => x.id === id);
     const qty = tempQuantities[id] || 1;
-    const existing = cart.find(i => i.id === id);
+    const variantIdx = tempVariants[id] || 0;
+    const selectedVariant = p.variants[variantIdx];
+
+    // Buscar si ya existe este mismo producto CON EL MISMO TAMAÑO en el carrito
+    const existing = cart.find(i => i.id === id && i.size === selectedVariant.size);
 
     if (existing) {
       existing.qty += qty;
     } else {
-      cart.push({ id, qty });
+      cart.push({ 
+        id: id, 
+        qty: qty, 
+        size: selectedVariant.size, 
+        priceUSD: selectedVariant.priceUSD 
+      });
     }
     
     tempQuantities[id] = 1;
@@ -795,20 +1022,19 @@
     updateCartUI();
   }
 
-  function updateCartItemQty(id, delta) {
-    const item = cart.find(i => i.id === id);
-    if (item) {
-      item.qty += delta;
-      if (item.qty <= 0) {
-        removeFromCart(id);
+  function updateCartItemQty(index, delta) {
+    if (cart[index]) {
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) {
+        removeFromCart(index);
       } else {
         updateCartUI();
       }
     }
   }
 
-  function removeFromCart(id) {
-    cart = cart.filter(i => i.id !== id);
+  function removeFromCart(index) {
+    cart.splice(index, 1);
     updateCartUI();
   }
 
@@ -829,23 +1055,23 @@
     }
 
     let total = 0;
-    itemsEl.innerHTML = cart.map(item => {
+    itemsEl.innerHTML = cart.map((item, index) => {
       const p = products.find(x => x.id === item.id);
-      const sub = p.priceUSD * item.qty;
+      const sub = item.priceUSD * item.qty;
       total += sub;
       return `
         <div class="cart-item">
           <img src="${p.img}" alt="${p.name}" />
           <div class="cart-item-info">
             <div class="cart-item-name">${p.name}</div>
-            <div class="cart-item-meta">${p.size}</div>
+            <div class="cart-item-meta">Tamaño: ${item.size}</div>
             <div class="cart-item-price">${formatPrice(sub)}</div>
-            <button class="remove-item" onclick="removeFromCart(${p.id})">Eliminar</button>
+            <button class="remove-item" onclick="removeFromCart(${index})">Eliminar</button>
           </div>
           <div class="qty-stepper">
-            <button onclick="updateCartItemQty(${p.id}, -1)">-</button>
+            <button onclick="updateCartItemQty(${index}, -1)">-</button>
             <span>${item.qty}</span>
-            <button onclick="updateCartItemQty(${p.id}, 1)">+</button>
+            <button onclick="updateCartItemQty(${index}, 1)">+</button>
           </div>
         </div>
       `;
@@ -876,7 +1102,8 @@
 
     if (currentModalProductId) {
       const p = products.find(x => x.id === currentModalProductId);
-      document.getElementById("modal-price").textContent = formatPrice(p.priceUSD);
+      const variantIdx = tempVariants[currentModalProductId] || 0;
+      document.getElementById("modal-price").textContent = formatPrice(p.variants[variantIdx].priceUSD);
     }
   }
 
@@ -888,9 +1115,9 @@
 
     cart.forEach(item => {
       const p = products.find(x => x.id === item.id);
-      const sub = p.priceUSD * item.qty;
+      const sub = item.priceUSD * item.qty;
       totalUSD += sub;
-      msg += `• *${p.name}* (${p.size}) x${item.qty} — ${formatPrice(sub)}%0A`;
+      msg += `• *${p.name}* (${item.size}) x${item.qty} — ${formatPrice(sub)}%0A`;
     });
 
     msg += `%0A*Total: ${formatPrice(totalUSD)}*`;
@@ -906,4 +1133,5 @@
 </script>
 </body>
 </html>
+
 
