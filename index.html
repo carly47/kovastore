@@ -26,7 +26,6 @@
       line-height: 1.4;
     }
 
-    /* Header */
     header {
       position: sticky;
       top: 0;
@@ -65,7 +64,6 @@
       gap: 12px;
     }
 
-    /* Currency toggle */
     .currency-toggle {
       display: flex;
       background: var(--card);
@@ -77,8 +75,8 @@
       background: transparent;
       border: none;
       color: var(--muted);
-      padding: 8px 14px;
-      font-size: 0.85rem;
+      padding: 8px 10px;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
@@ -88,7 +86,6 @@
       color: #111;
     }
 
-    /* Cart button */
     .cart-btn {
       position: relative;
       background: var(--card);
@@ -119,7 +116,6 @@
       justify-content: center;
     }
 
-    /* Main */
     main {
       max-width: 1200px;
       margin: 0 auto;
@@ -145,7 +141,6 @@
       margin-bottom: 8px;
     }
 
-    /* Grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -160,6 +155,7 @@
       transition: transform 0.2s, border-color 0.2s;
       display: flex;
       flex-direction: column;
+      cursor: pointer;
     }
     .product-card:hover {
       transform: translateY(-4px);
@@ -199,25 +195,32 @@
       margin-top: 4px;
     }
 
-    .qty-row {
+    /* Selector de cantidad con +/- */
+    .qty-stepper {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .qty-row label {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-    .qty-input {
-      width: 60px;
       background: #1a1a1a;
       border: 1px solid #333;
-      color: #fff;
       border-radius: 6px;
-      padding: 6px 8px;
-      text-align: center;
+      width: fit-content;
+    }
+    .qty-stepper button {
+      background: transparent;
+      border: none;
+      color: var(--accent);
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .qty-stepper button:hover {
+      background: #252525;
+    }
+    .qty-stepper span {
+      padding: 0 10px;
       font-size: 0.9rem;
+      font-weight: 600;
     }
 
     .add-btn {
@@ -238,7 +241,89 @@
       color: #111;
     }
 
-    /* Cart sidebar */
+    /* Modal de Detalle de Perfume */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      padding: 16px;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: #121212;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 550px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      position: relative;
+    }
+    .close-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    .modal-img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      background: #000;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .modal-body {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .modal-title { font-size: 1.3rem; font-weight: 700; color: #fff; }
+    .modal-ref { font-size: 0.85rem; color: var(--muted); }
+    .modal-desc { font-size: 0.9rem; color: #ccc; line-height: 1.5; }
+    .modal-price { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+    
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .buy-now-btn {
+      background: var(--accent);
+      color: #111;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .add-continue-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* Cart */
     .cart-overlay {
       position: fixed;
       inset: 0;
@@ -301,6 +386,7 @@
       gap: 12px;
       padding: 12px 0;
       border-bottom: 1px solid #222;
+      align-items: center;
     }
     .cart-item img {
       width: 60px;
@@ -382,7 +468,6 @@
       font-size: 0.95rem;
     }
 
-    /* Footer note */
     .disclaimer {
       text-align: center;
       font-size: 0.7rem;
@@ -409,6 +494,7 @@
   <div class="header-actions">
     <div class="currency-toggle">
       <button id="btn-usd" class="active" onclick="setCurrency('USD')">USD</button>
+      <button id="btn-eur" onclick="setCurrency('EUR')">EUR</button>
       <button id="btn-cup" onclick="setCurrency('CUP')">CUP</button>
     </div>
     <button class="cart-btn" onclick="openCart()">
@@ -436,6 +522,31 @@
   </p>
 </main>
 
+<!-- Modal de Detalle de Producto -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close-modal" onclick="closeModal()">&times;</button>
+    <img id="modal-img" class="modal-img" src="" alt="" />
+    <div class="modal-body">
+      <div id="modal-title" class="modal-title"></div>
+      <div id="modal-ref" class="modal-ref"></div>
+      <div id="modal-desc" class="modal-desc"></div>
+      <div id="modal-price" class="modal-price"></div>
+      
+      <div class="qty-stepper" style="margin-top: 6px;">
+        <button onclick="adjustModalQty(-1)">-</button>
+        <span id="modal-qty">1</span>
+        <button onclick="adjustModalQty(1)">+</button>
+      </div>
+
+      <div class="modal-actions">
+        <button class="buy-now-btn" onclick="buyNowFromModal()">Comprar Ya</button>
+        <button class="add-continue-btn" onclick="addFromModal()">Añadir y seguir explorando</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Cart -->
 <div class="cart-overlay" id="cart-overlay" onclick="closeCart(event)">
   <div class="cart-panel" onclick="event.stopPropagation()">
@@ -460,55 +571,51 @@
 
 <script>
   // ========== CONFIGURACIÓN ==========
-  // Cambia este número por el de WhatsApp real (código de país + número, sin + ni espacios)
-  const WHATSAPP_NUMBER = "5355360008";  // <-- PON AQUÍ TU NÚMERO
+  const WHATSAPP_NUMBER = "5355360008";
+  const RATE_CUP = 740;  // 1 USD = 740 CUP
+  const RATE_EUR_CUP = 840; // 1 EUR = 840 CUP (Tasa directa)
+  const USD_TO_EUR = RATE_CUP / RATE_EUR_CUP; // Conversión USD a EUR
 
-  // Tasa de cambio aproximada (puedes cambiarla)
-  const RATE_CUP = 740; // 1 USD = 740 CUP
-
-  // Productos (precios de ejemplo en USD – cámbialos después)
   const products = [
     // 20 ml
-    { id: 1,  name: "1 Million",                    ref: "Gold Digger",           size: "20 ml", priceUSD: 18, img: "img/img-002.png" },
-    { id: 2,  name: "Tom Ford F'n Fabulous",         ref: "F'n Marvelous",         size: "20 ml", priceUSD: 22, img: "img/img-003.png" },
-    { id: 3,  name: "Sauvage Elixir",                ref: "Savage Spell",          size: "20 ml", priceUSD: 20, img: "img/img-004.png" },
-    { id: 4,  name: "Christian Clive Blonde Amber",  ref: "Goldie Luxe",           size: "20 ml", priceUSD: 25, img: "img/goldie_luxe.jpg" },
-    { id: 5,  name: "Creed Queen of Silk",           ref: "Sew Over You",          size: "20 ml", priceUSD: 24, img: "img/sew_over_you.jpg" },
-    { id: 6,  name: "YSL Libre",                     ref: "Libre-Ate Me",          size: "20 ml", priceUSD: 19, img: "img/img-005.png" },
-    { id: 7,  name: "JPG Le Male Elixir",            ref: "Alpha Elixir",          size: "20 ml", priceUSD: 18, img: "img/alpha_elixir.jpg" },
-    { id: 8,  name: "Tom Ford Electric Cherry",      ref: "Cherry Spark",          size: "20 ml", priceUSD: 23, img: "img/img-006.png" },
-    { id: 9,  name: "Bleu de Chanel",                ref: "Azure Depth",           size: "20 ml", priceUSD: 20, img: "img/img-007.png" },
+    { id: 1,  name: "1 Million",                    ref: "Gold Digger",           size: "20 ml", priceUSD: 18, img: "img/img-002.png", desc: "Una fragancia audaz con notas amaderadas y toques de cuero y especias, perfecta para destacar en la noche." },
+    { id: 2,  name: "Tom Ford F'n Fabulous",         ref: "F'n Marvelous",         size: "20 ml", priceUSD: 22, img: "img/img-003.png", desc: "Un aroma cuero-oriental sofisticado y exclusivo, enriquecido con almendra amarga y haba tonka." },
+    { id: 3,  name: "Sauvage Elixir",                ref: "Savage Spell",          size: "20 ml", priceUSD: 20, img: "img/img-004.png", desc: "Concentración extraordinaria de notas especiadas, lavanda fresca y un fondo de maderas ricas." },
+    { id: 4,  name: "Christian Clive Blonde Amber",  ref: "Goldie Luxe",           size: "20 ml", priceUSD: 25, img: "img/goldie_luxe.jpg", desc: "Ámbar cálido, notas frutales y un toque de ron que evocan elegancia atemporal." },
+    { id: 5,  name: "Creed Queen of Silk",           ref: "Sew Over You",          size: "20 ml", priceUSD: 24, img: "img/sew_over_you.jpg", desc: "Una esencia envolvente con flores blancas, vainilla suave y notas amaderadas delicadas." },
+    { id: 6,  name: "YSL Libre",                     ref: "Libre-Ate Me",          size: "20 ml", priceUSD: 19, img: "img/img-005.png", desc: "El equilibrio perfecto entre la lavanda francesa y la flor de azahar marroquí." },
+    { id: 7,  name: "JPG Le Male Elixir",            ref: "Alpha Elixir",          size: "20 ml", priceUSD: 18, img: "img/alpha_elixir.jpg", desc: "Intenso y sensual con notas dulces de haba tonka, menta fresca y benjuí." },
+    { id: 8,  name: "Tom Ford Electric Cherry",      ref: "Cherry Spark",          size: "20 ml", priceUSD: 23, img: "img/img-006.png", desc: "Cereza ácida combinada con jazmín dulce y pimienta rosada vibrante." },
+    { id: 9,  name: "Bleu de Chanel",                ref: "Azure Depth",           size: "20 ml", priceUSD: 20, img: "img/img-007.png", desc: "Una fragancia aromática y amaderada de carácter independiente y elegante." },
 
     // 50 ml
-    { id: 10, name: "Azzaro Most Wanted",            ref: "Wanted Dead or Adored", size: "50 ml", priceUSD: 35, img: "img/img-010.png" },
-    { id: 11, name: "YSL Y",                         ref: "Why Not",               size: "50 ml", priceUSD: 32, img: "img/img-011.png" },
-    { id: 12, name: "JPG Ultra Male",                ref: "Alpha Noir",            size: "50 ml", priceUSD: 34, img: "img/img-012.png" },
-    { id: 13, name: "Viktor Rolf Spicebomb Extreme", ref: "Spice to Meet You",     size: "50 ml", priceUSD: 33, img: "img/img-013.png" },
-    { id: 14, name: "Tom Ford Ombré Leather",        ref: "Leather Late Than Never", size: "50 ml", priceUSD: 38, img: "img/img-014.png" },
-    { id: 15, name: "Born in Roma Intense",          ref: "When in Roma",          size: "50 ml", priceUSD: 36, img: "img/img-015.png" },
-    { id: 16, name: "YSL Libre",                     ref: "Libre-Ate Me",          size: "50 ml", priceUSD: 34, img: "img/img-016.png" },
-    { id: 17, name: "Ex Nihilo Blue Talisman",       ref: "Ya Blue Me Away",       size: "50 ml", priceUSD: 40, img: "img/img-017.png" },
-    { id: 18, name: "Acqua di Giò Profumo",          ref: "Holy Ship You Clean Up Nice", size: "50 ml", priceUSD: 35, img: "img/holy_ship.jpg" },
+    { id: 10, name: "Azzaro Most Wanted",            ref: "Wanted Dead or Adored", size: "50 ml", priceUSD: 35, img: "img/img-010.png", desc: "Un aroma amaderado oriental de alta intensidad con cardamomo, toffee y madera de ámbar." },
+    { id: 11, name: "YSL Y",                         ref: "Why Not",               size: "50 ml", priceUSD: 32, img: "img/img-011.png", desc: "Aroma fresco y profundo con notas de bergamota, salvia y madera de cedro." },
+    { id: 12, name: "JPG Ultra Male",                ref: "Alpha Noir",            size: "50 ml", priceUSD: 34, img: "img/img-012.png", desc: "Una explosión de pera dulce, lavanda negra y vainilla amaderada." },
+    { id: 13, name: "Viktor Rolf Spicebomb Extreme", ref: "Spice to Meet You",     size: "50 ml", priceUSD: 33, img: "img/img-013.png", desc: "Combinación explosiva de especias cálidas, comino, canela y tabaco rico." },
+    { id: 14, name: "Tom Ford Ombré Leather",        ref: "Leather Late Than Never", size: "50 ml", priceUSD: 38, img: "img/img-014.png", desc: "Cuero texturizado, cardamomo y jazmín que proyectan libertad y profundidad." },
+    { id: 15, name: "Born in Roma Intense",          ref: "When in Roma",          size: "50 ml", priceUSD: 36, img: "img/img-015.png", desc: "Un homenaje moderno con notas de vainilla magnética y jazmín solar." },
+    { id: 16, name: "YSL Libre",                     ref: "Libre-Ate Me",          size: "50 ml", priceUSD: 34, img: "img/img-016.png", desc: "Presentación de 50 ml de esta fragancia floral y audaz con alta fijación." },
+    { id: 17, name: "Ex Nihilo Blue Talisman",       ref: "Ya Blue Me Away",       size: "50 ml", priceUSD: 40, img: "img/img-017.png", desc: "Pera, bergamota, flor de azahar y maderas que crean un amuleto olfativo único." },
+    { id: 18, name: "Acqua di Giò Profumo",          ref: "Holy Ship You Clean Up Nice", size: "50 ml", priceUSD: 35, img: "img/holy_ship.jpg", desc: "Frescura marina combinada con la profundidad del incienso y el pachulí." },
   ];
 
-  // ========== STATE ==========
   let currency = "USD";
-  let cart = []; // { id, qty }
+  let cart = [];
+  let tempQuantities = {}; 
+  let currentModalProductId = null;
+  let currentModalQty = 1;
 
-  // ========== HELPERS ==========
   function formatPrice(usd) {
     if (currency === "USD") {
       return "$" + usd.toFixed(2);
+    } else if (currency === "EUR") {
+      return "€" + (usd * USD_TO_EUR).toFixed(2);
     } else {
       return (usd * RATE_CUP).toLocaleString("es-CU") + " CUP";
     }
   }
 
-  function getPrice(p) {
-    return currency === "USD" ? p.priceUSD : p.priceUSD * RATE_CUP;
-  }
-
-  // ========== RENDER PRODUCTS ==========
   function renderProducts() {
     const grid20 = document.getElementById("grid-20");
     const grid50 = document.getElementById("grid-50");
@@ -516,19 +623,26 @@
     grid50.innerHTML = "";
 
     products.forEach(p => {
+      if (!tempQuantities[p.id]) tempQuantities[p.id] = 1;
+
       const card = document.createElement("div");
       card.className = "product-card";
+      card.onclick = () => openModal(p.id);
+
       card.innerHTML = `
         <img class="product-img" src="${p.img}" alt="${p.name}" loading="lazy" />
         <div class="product-body">
           <div class="product-name">${p.name}</div>
           <div class="product-ref">${p.ref} · ${p.size}</div>
           <div class="product-price">${formatPrice(p.priceUSD)}</div>
-          <div class="qty-row">
-            <label>Cant:</label>
-            <input type="number" class="qty-input" id="qty-${p.id}" min="1" value="1" />
+          
+          <div class="qty-stepper" onclick="event.stopPropagation()">
+            <button onclick="changeCardQty(${p.id}, -1)">-</button>
+            <span id="qty-val-${p.id}">${tempQuantities[p.id]}</span>
+            <button onclick="changeCardQty(${p.id}, 1)">+</button>
           </div>
-          <button class="add-btn" onclick="addToCart(${p.id})">Agregar al carrito</button>
+
+          <button class="add-btn" onclick="event.stopPropagation(); addToCart(${p.id})">Agregar al carrito</button>
         </div>
       `;
       if (p.size === "20 ml") grid20.appendChild(card);
@@ -536,19 +650,85 @@
     });
   }
 
-  // ========== CART ==========
-  function addToCart(id) {
-    const qtyInput = document.getElementById(`qty-${id}`);
-    const qty = Math.max(1, parseInt(qtyInput.value) || 1);
+  function changeCardQty(id, delta) {
+    tempQuantities[id] = Math.max(1, (tempQuantities[id] || 1) + delta);
+    document.getElementById(`qty-val-${id}`).textContent = tempQuantities[id];
+  }
 
+  // ========== MODAL FUNCTIONS ==========
+  function openModal(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+
+    currentModalProductId = id;
+    currentModalQty = tempQuantities[id] || 1;
+
+    document.getElementById("modal-img").src = p.img;
+    document.getElementById("modal-title").textContent = p.name;
+    document.getElementById("modal-ref").textContent = `${p.ref} · ${p.size}`;
+    document.getElementById("modal-desc").textContent = p.desc;
+    document.getElementById("modal-price").textContent = formatPrice(p.priceUSD);
+    document.getElementById("modal-qty").textContent = currentModalQty;
+
+    document.getElementById("modal-overlay").classList.add("open");
+  }
+
+  function closeModal(e) {
+    if (!e || e.target.id === "modal-overlay") {
+      document.getElementById("modal-overlay").classList.remove("open");
+    }
+  }
+
+  function adjustModalQty(delta) {
+    currentModalQty = Math.max(1, currentModalQty + delta);
+    document.getElementById("modal-qty").textContent = currentModalQty;
+  }
+
+  function addFromModal() {
+    if (currentModalProductId) {
+      tempQuantities[currentModalProductId] = currentModalQty;
+      addToCart(currentModalProductId);
+      closeModal();
+    }
+  }
+
+  function buyNowFromModal() {
+    if (currentModalProductId) {
+      tempQuantities[currentModalProductId] = currentModalQty;
+      addToCart(currentModalProductId);
+      closeModal();
+      openCart();
+    }
+  }
+
+  // ========== CART FUNCTIONS ==========
+  function addToCart(id) {
+    const qty = tempQuantities[id] || 1;
     const existing = cart.find(i => i.id === id);
+
     if (existing) {
       existing.qty += qty;
     } else {
       cart.push({ id, qty });
     }
+    
+    // Resetear temporal
+    tempQuantities[id] = 1;
+    renderProducts();
+
     updateCartUI();
-    openCart();
+  }
+
+  function updateCartItemQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (item) {
+      item.qty += delta;
+      if (item.qty <= 0) {
+        removeFromCart(id);
+      } else {
+        updateCartUI();
+      }
+    }
   }
 
   function removeFromCart(id) {
@@ -582,9 +762,14 @@
           <img src="${p.img}" alt="${p.name}" />
           <div class="cart-item-info">
             <div class="cart-item-name">${p.name}</div>
-            <div class="cart-item-meta">${p.size} × ${item.qty}</div>
+            <div class="cart-item-meta">${p.size}</div>
             <div class="cart-item-price">${formatPrice(sub)}</div>
             <button class="remove-item" onclick="removeFromCart(${p.id})">Eliminar</button>
+          </div>
+          <div class="qty-stepper">
+            <button onclick="updateCartItemQty(${p.id}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button onclick="updateCartItemQty(${p.id}, 1)">+</button>
           </div>
         </div>
       `;
@@ -597,22 +782,28 @@
   function openCart() {
     document.getElementById("cart-overlay").classList.add("open");
   }
+
   function closeCart(e) {
     if (!e || e.target.id === "cart-overlay") {
       document.getElementById("cart-overlay").classList.remove("open");
     }
   }
 
-  // ========== CURRENCY ==========
   function setCurrency(cur) {
     currency = cur;
     document.getElementById("btn-usd").classList.toggle("active", cur === "USD");
+    document.getElementById("btn-eur").classList.toggle("active", cur === "EUR");
     document.getElementById("btn-cup").classList.toggle("active", cur === "CUP");
+    
     renderProducts();
     updateCartUI();
+
+    if (currentModalProductId) {
+      const p = products.find(x => x.id === currentModalProductId);
+      document.getElementById("modal-price").textContent = formatPrice(p.priceUSD);
+    }
   }
 
-  // ========== WHATSAPP ORDER ==========
   function sendOrder() {
     if (cart.length === 0) return;
 
@@ -634,10 +825,8 @@
     window.open(url, "_blank");
   }
 
-  // Init
   renderProducts();
   updateCartUI();
 </script>
 </body>
 </html>
-EOF
