@@ -11,14 +11,17 @@
       --card: #141414;
       --border: #2a2a2a;
       --text: #f0f0f0;
-      --muted: #888;
+      --muted: #aaa;
       --accent: #c9a84c;
       --green: #25d366;
       --danger: #e74c3c;
       --header-bg: rgba(10, 10, 10, 0.95);
       --input-bg: #1a1a1a;
-      --hero-overlay-start: rgba(10, 10, 10, 0.6);
-      --hero-overlay-end: rgba(10, 10, 10, 0.95);
+      
+      /* Capa oscura suave para mantener visible la imagen de la portada */
+      --hero-overlay-start: rgba(10, 10, 10, 0.35);
+      --hero-overlay-end: rgba(10, 10, 10, 0.75);
+      --hero-text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
 
     /* DETECCIÓN AUTOMÁTICA DE MODO DÍA / CLARO SEGÚN EL TELÉFONO */
@@ -28,12 +31,15 @@
         --card: #ffffff;
         --border: #e2e8f0;
         --text: #1a1a1a;
-        --muted: #666666;
+        --muted: #555555;
         --accent: #b38e2d;
         --header-bg: rgba(255, 255, 255, 0.95);
         --input-bg: #f1f5f9;
-        --hero-overlay-start: rgba(255, 255, 255, 0.7);
-        --hero-overlay-end: rgba(248, 249, 250, 0.98);
+        
+        /* Capa clara muy translúcida para que los frascos no se pierdan */
+        --hero-overlay-start: rgba(255, 255, 255, 0.25);
+        --hero-overlay-end: rgba(255, 255, 255, 0.65);
+        --hero-text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
       }
     }
 
@@ -143,7 +149,7 @@
       justify-content: center;
     }
 
-    /* SECCIÓN PORTADA / HERO */
+    /* SECCIÓN PORTADA / HERO CON MÁXIMA CLARIDAD DE IMAGEN */
     .hero-section {
       position: relative;
       width: 100%;
@@ -169,10 +175,11 @@
 
     .hero-title {
       font-size: 2.8rem;
-      font-weight: 300;
+      font-weight: 400;
       letter-spacing: 8px;
       color: var(--text);
       text-transform: uppercase;
+      text-shadow: var(--hero-text-shadow);
     }
 
     .hero-subtitle {
@@ -181,13 +188,16 @@
       color: var(--accent);
       letter-spacing: 2px;
       font-style: italic;
+      text-shadow: var(--hero-text-shadow);
     }
 
     .hero-description {
       font-size: 0.95rem;
-      color: var(--muted);
+      color: var(--text);
       line-height: 1.7;
       max-width: 650px;
+      font-weight: 500;
+      text-shadow: var(--hero-text-shadow);
     }
 
     .hero-btn {
@@ -202,7 +212,7 @@
       letter-spacing: 1px;
       text-decoration: none;
       transition: transform 0.2s, background 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
     .hero-btn:hover {
       transform: translateY(-2px);
@@ -1155,3 +1165,4 @@
 </script>
 </body>
 </html>
+
