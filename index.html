@@ -1,269 +1,931 @@
-// Arreglo completo de productos
-const products = [
-  { 
-    id: 1,  
-    name: "1 Million", 
-    ref: "Gold Digger", 
-    img: "img/img-002.png", 
-    desc: "Una fragancia audaz con notas amaderadas y toques de cuero y especias, perfecta para destacar en la noche.",
-    variants: [
-      { size: "20 ml", priceUSD: 18 },
-      { size: "50 ml", priceUSD: 30 }
-    ]
-  },
-  { 
-    id: 2,  
-    name: "Tom Ford F'n Fabulous", 
-    ref: "F'n Marvelous", 
-    img: "img/img-003.png", 
-    desc: "Un aroma cuero-oriental sofisticado y exclusivo, enriquecido con almendra amarga y haba tonka.",
-    variants: [
-      { size: "20 ml", priceUSD: 22 },
-      { size: "50 ml", priceUSD: 38 }
-    ]
-  },
-  { 
-    id: 3,  
-    name: "Sauvage Elixir", 
-    ref: "Savage Spell", 
-    img: "img/img-004.png", 
-    desc: "Concentración extraordinaria de notas especiadas, lavanda fresca y un fondo de maderas ricas.",
-    variants: [
-      { size: "20 ml", priceUSD: 20 },
-      { size: "50 ml", priceUSD: 35 }
-    ]
-  },
-  { 
-    id: 4,  
-    name: "Christian Clive Blonde Amber", 
-    ref: "Goldie Luxe", 
-    img: "img/goldie_luxe.jpg", 
-    desc: "Ámbar cálido, notas frutales y un toque de ron que evocan elegancia atemporal.",
-    variants: [
-      { size: "20 ml", priceUSD: 25 },
-      { size: "50 ml", priceUSD: 42 }
-    ]
-  },
-  { 
-    id: 5,  
-    name: "Creed Queen of Silk", 
-    ref: "Sew Over You", 
-    img: "img/sew_over_you.jpg", 
-    desc: "Una esencia envolvente con flores blancas, vainilla suave y notas amaderadas delicadas.",
-    variants: [
-      { size: "20 ml", priceUSD: 24 },
-      { size: "50 ml", priceUSD: 40 }
-    ]
-  },
-  { 
-    id: 6,  
-    name: "YSL Libre", 
-    ref: "Libre-Ate Me", 
-    img: "img/img-005.png", 
-    desc: "El equilibrio perfecto entre la lavanda francesa y la flor de azahar marroquí.",
-    variants: [
-      { size: "20 ml", priceUSD: 19 },
-      { size: "50 ml", priceUSD: 34 }
-    ]
-  },
-  { 
-    id: 7,  
-    name: "JPG Le Male Elixir", 
-    ref: "Alpha Elixir", 
-    img: "img/alpha_elixir.jpg", 
-    desc: "Intenso y sensual con notas dulces de haba tonka, menta fresca y benjuí.",
-    variants: [
-      { size: "20 ml", priceUSD: 18 },
-      { size: "50 ml", priceUSD: 32 }
-    ]
-  },
-  { 
-    id: 8,  
-    name: "Tom Ford Electric Cherry", 
-    ref: "Cherry Spark", 
-    img: "img/img-006.png", 
-    desc: "Cereza ácida combinada con jazmín dulce y pimienta rosada vibrante.",
-    variants: [
-      { size: "20 ml", priceUSD: 23 },
-      { size: "50 ml", priceUSD: 38 }
-    ]
-  },
-  { 
-    id: 9,  
-    name: "Bleu de Chanel", 
-    ref: "Azure Depth", 
-    img: "img/img-007.png", 
-    desc: "Una fragancia aromática y amaderada de carácter independiente y elegante.",
-    variants: [
-      { size: "20 ml", priceUSD: 20 },
-      { size: "50 ml", priceUSD: 35 }
-    ]
-  },
-  { 
-    id: 10, 
-    name: "Azzaro Most Wanted", 
-    ref: "Wanted Dead or Adored", 
-    img: "img/img-010.png", 
-    desc: "Un aroma amaderado oriental de alta intensidad con cardamomo, toffee y madera de ámbar.",
-    variants: [
-      { size: "20 ml", priceUSD: 20 },
-      { size: "50 ml", priceUSD: 35 }
-    ]
-  },
-  { 
-    id: 11, 
-    name: "YSL Y", 
-    ref: "Why Not", 
-    img: "img/img-011.png", 
-    desc: "Aroma fresco y profundo con notas de bergamota, salvia y madera de cedro.",
-    variants: [
-      { size: "20 ml", priceUSD: 18 },
-      { size: "50 ml", priceUSD: 32 }
-    ]
-  },
-  { 
-    id: 12, 
-    name: "JPG Ultra Male", 
-    ref: "Alpha Noir", 
-    img: "img/img-012.png", 
-    desc: "Una explosión de pera dulce, lavanda negra y vainilla amaderada.",
-    variants: [
-      { size: "20 ml", priceUSD: 19 },
-      { size: "50 ml", priceUSD: 34 }
-    ]
-  },
-  { 
-    id: 13, 
-    name: "Viktor Rolf Spicebomb Extreme", 
-    ref: "Spice to Meet You", 
-    img: "img/img-013.png", 
-    desc: "Combinación explosiva de especias cálidas, comino, canela y tabaco rico.",
-    variants: [
-      { size: "20 ml", priceUSD: 19 },
-      { size: "50 ml", priceUSD: 33 }
-    ]
-  },
-  { 
-    id: 14, 
-    name: "Tom Ford Ombré Leather", 
-    ref: "Leather Late Than Never", 
-    img: "img/img-014.png", 
-    desc: "Cuero texturizado, cardamomo y jazmín que proyectan libertad y profundidad.",
-    variants: [
-      { size: "20 ml", priceUSD: 22 },
-      { size: "50 ml", priceUSD: 38 }
-    ]
-  },
-  { 
-    id: 15, 
-    name: "Born in Roma Intense", 
-    ref: "When in Roma", 
-    img: "img/img-015.png", 
-    desc: "Un homenaje moderno con notas de vainilla magnética y jazmín solar.",
-    variants: [
-      { size: "20 ml", priceUSD: 21 },
-      { size: "50 ml", priceUSD: 36 }
-    ]
-  },
-  { 
-    id: 17, 
-    name: "Ex Nihilo Blue Talisman", 
-    ref: "Ya Blue Me Away", 
-    img: "img/img-017.png", 
-    desc: "Pera, bergamota, flor de azahar y maderas que crean un amuleto olfativo único.",
-    variants: [
-      { size: "20 ml", priceUSD: 24 },
-      { size: "50 ml", priceUSD: 40 }
-    ]
-  },
-  { 
-    id: 18, 
-    name: "Acqua di Giò Profumo", 
-    ref: "Holy Ship You Clean Up Nice", 
-    img: "img/holy_ship.jpg", 
-    desc: "Frescura marina combinada con la profundidad del incienso y el pachulí.",
-    variants: [
-      { size: "20 ml", priceUSD: 20 },
-      { size: "50 ml", priceUSD: 35 }
-    ]
-  },
-  /* NUEVOS PRODUCTOS (PRESENTACIÓN ÚNICA DE 30 ML) */
-  { 
-    id: 19, 
-    name: "Miss Dior", 
-    ref: "Cherry On Top", 
-    img: "img/cherry_on_top.jpg", 
-    desc: "Un bouquet floral elegante con notas de rosa de Grasse, peonía y un toque fresco y romántico.",
-    variants: [
-      { size: "30 ml", priceUSD: 25 }
-    ]
-  },
-  { 
-    id: 20, 
-    name: "Tom Ford Tobacco Vanille", 
-    ref: "Cigars & Ice Cream", 
-    img: "img/cigars_ice_cream.jpg", 
-    desc: "Una opulenta mezcla de hoja de tabaco, especias aromáticas, vainilla dulce y cacao suave.",
-    variants: [
-      { size: "30 ml", priceUSD: 28 }
-    ]
-  },
-  { 
-    id: 21, 
-    name: "YSL MYSLF", 
-    ref: "Eternal Bergamot", 
-    img: "img/eternal_bergamot.jpg", 
-    desc: "Una fragancia floral-amaderada moderna centrada en la bergamota fresca y la flor de azahar.",
-    variants: [
-      { size: "30 ml", priceUSD: 26 }
-    ]
-  },
-  { 
-    id: 22, 
-    name: "Paco Rabanne Invictus", 
-    ref: "Exor", 
-    img: "img/exor.jpg", 
-    desc: "Aroma fresco y vibrante con acorde marino, pomelo radiante y un fondo de madera de gualaco.",
-    variants: [
-      { size: "30 ml", priceUSD: 24 }
-    ]
-  },
-  { 
-    id: 23, 
-    name: "Louis Vuitton Ombre Nomade", 
-    ref: "Incense Oud", 
-    img: "img/incense_oud.jpg", 
-    desc: "Un viaje sensorial intenso cargado de madera de Oud, lágrimas de incienso y toques de frambuesa.",
-    variants: [
-      { size: "30 ml", priceUSD: 30 }
-    ]
-  },
-  { 
-    id: 24, 
-    name: "Versace Eros", 
-    ref: "Mint Ocean", 
-    img: "img/mint_ocean.jpg", 
-    desc: "Una explosión de frescura con menta, manzana verde y limón italiano respaldados por haba tonka.",
-    variants: [
-      { size: "30 ml", priceUSD: 25 }
-    ]
-  }
-];
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eternal Perfume Oils - Catálogo Exclusivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ==========================================================================
+       1. VARIABLES Y ESTILOS GLOBALES
+       ========================================================================== */
+    :root {
+      --primary-color: #0f172a;
+      --accent-color: #c5a059;
+      --accent-hover: #a3813e;
+      --bg-light: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --transition: all 0.3s ease;
+    }
 
-// Función para renderizar los selectores de tamaño dinámicamente según cada producto
-function renderProductVariants(productId, selectContainerId) {
-  const product = products.find(p => p.id === productId);
-  const selectElement = document.getElementById(selectContainerId);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  if (!product || !selectElement) return;
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
 
-  selectElement.innerHTML = ""; // Limpia las opciones predeterminadas
+    h1, h2, h3, h4, .brand-font {
+      font-family: 'Playfair Display', serif;
+    }
 
-  product.variants.forEach(variant => {
-    const option = document.createElement("option");
-    option.value = variant.size;
-    option.textContent = `${variant.size} - $${variant.priceUSD} USD`;
-    selectElement.appendChild(option);
-  });
-}
+    /* ==========================================================================
+       2. NAVEGACIÓN Y CABECERA
+       ========================================================================== */
+    header {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+    }
 
+    .header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .logo-subtitle {
+      font-size: 0.75rem;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: block;
+    }
+
+    .cart-btn {
+      position: relative;
+      background: transparent;
+      border: 1px solid var(--accent-color);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .cart-btn:hover {
+      background: var(--accent-color);
+      color: var(--primary-color);
+    }
+
+    .cart-badge {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 50%;
+      padding: 2px 6px;
+      position: absolute;
+      top: -8px;
+      right: -8px;
+    }
+
+    /* ==========================================================================
+       3. BANNER Y SECCIÓN PRINCIPAL
+       ========================================================================== */
+    .hero {
+      background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('img/hero-bg.jpg') center/cover no-repeat;
+      color: #fff;
+      text-align: center;
+      padding: 4rem 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      color: var(--accent-color);
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      color: #e2e8f0;
+    }
+
+    /* ==========================================================================
+       4. BUSCADOR Y FILTROS
+       ========================================================================== */
+    .controls-section {
+      max-width: 1280px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.2);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       5. CATÁLOGO DE PRODUCTOS (GRID Y TARJETAS)
+       ========================================================================== */
+    .catalog-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-img-wrapper {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      background-color: #f1f5f9;
+    }
+
+    .card-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .card:hover .card-img-wrapper img {
+      transform: scale(1.05);
+    }
+
+    .card-content {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.25rem;
+    }
+
+    .card-ref {
+      font-size: 0.85rem;
+      color: var(--accent-color);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: auto;
+    }
+
+    .variant-select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      background-color: #fff;
+      color: var(--text-main);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn-add-cart {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .btn-add-cart:hover {
+      background-color: var(--accent-color);
+      color: var(--primary-color);
+    }
+
+    /* ==========================================================================
+       6. MODAL DEL CARRITO Y CHECKOUT
+       ========================================================================== */
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background-color: #fff;
+      box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+      z-index: 1100;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-drawer.open {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 1.5rem;
+      background-color: var(--primary-color);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-cart {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .cart-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+    }
+
+    .cart-item-details {
+      flex-grow: 1;
+    }
+
+    .cart-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      background-color: #f8fafc;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-whatsapp {
+      width: 100%;
+      padding: 14px;
+      background-color: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn-whatsapp:hover {
+      background-color: #128c7e;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1050;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* ==========================================================================
+       7. RESPONSIVE
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .controls-section {
+        flex-direction: column;
+      }
+      .search-box {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABECERA DE LA PÁGINA -->
+  <header>
+    <div class="header-container">
+      <a href="#" class="logo">
+        <div>
+          <span class="logo-text">ETERNAL</span>
+          <span class="logo-subtitle">Perfume Oils</span>
+        </div>
+      </a>
+      <button class="cart-btn" id="cartToggle">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span>Carrito</span>
+        <span class="cart-badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- BANNER PRINCIPAL -->
+  <section class="hero">
+    <h1>Colección Exclusiva de Esencias</h1>
+    <p>Aceites perfumados de máxima duración inspirados en la alta perfumería internacional.</p>
+  </section>
+
+  <!-- BUSCADOR Y CONTROLES -->
+  <section class="controls-section">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Buscar por perfume inspirador o nombre de referencia...">
+    </div>
+  </section>
+
+  <!-- CATÁLOGOS DE PRODUCTOS -->
+  <main class="catalog-container">
+    <div class="catalog-grid" id="catalogGrid"></div>
+  </main>
+
+  <!-- DRAWER DEL CARRITO -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Tu Carrito</h3>
+      <button class="close-cart" id="closeCart"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="cart-body" id="cartItems">
+      <!-- Los elementos del carrito se generan dinámicamente -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cartTotalUSD">$0 USD</span>
+      </div>
+      <a href="#" class="btn-whatsapp" id="sendWhatsApp">
+        <i class="fa-brands fa-whatsapp"></i> Finalizar Pedido por WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- SCRIPT CON LÓGICA Y DATOS -->
+  <script>
+    /* ==========================================================================
+       DATOS DE PRODUCTOS
+       ========================================================================== */
+    const products = [
+      { 
+        id: 1,  
+        name: "1 Million", 
+        ref: "Gold Digger", 
+        img: "img/img-002.png", 
+        desc: "Una fragancia audaz con notas amaderadas y toques de cuero y especias, perfecta para destacar en la noche.",
+        variants: [
+          { size: "20 ml", priceUSD: 18 },
+          { size: "50 ml", priceUSD: 30 }
+        ]
+      },
+      { 
+        id: 2,  
+        name: "Tom Ford F'n Fabulous", 
+        ref: "F'n Marvelous", 
+        img: "img/img-003.png", 
+        desc: "Un aroma cuero-oriental sofisticado y exclusivo, enriquecido con almendra amarga y haba tonka.",
+        variants: [
+          { size: "20 ml", priceUSD: 22 },
+          { size: "50 ml", priceUSD: 38 }
+        ]
+      },
+      { 
+        id: 3,  
+        name: "Sauvage Elixir", 
+        ref: "Savage Spell", 
+        img: "img/img-004.png", 
+        desc: "Concentración extraordinaria de notas especiadas, lavanda fresca y un fondo de maderas ricas.",
+        variants: [
+          { size: "20 ml", priceUSD: 20 },
+          { size: "50 ml", priceUSD: 35 }
+        ]
+      },
+      { 
+        id: 4,  
+        name: "Christian Clive Blonde Amber", 
+        ref: "Goldie Luxe", 
+        img: "img/goldie_luxe.jpg", 
+        desc: "Ámbar cálido, notas frutales y un toque de ron que evocan elegancia atemporal.",
+        variants: [
+          { size: "20 ml", priceUSD: 25 },
+          { size: "50 ml", priceUSD: 42 }
+        ]
+      },
+      { 
+        id: 5,  
+        name: "Creed Queen of Silk", 
+        ref: "Sew Over You", 
+        img: "img/sew_over_you.jpg", 
+        desc: "Una esencia envolvente con flores blancas, vainilla suave y notas amaderadas delicadas.",
+        variants: [
+          { size: "20 ml", priceUSD: 24 },
+          { size: "50 ml", priceUSD: 40 }
+        ]
+      },
+      { 
+        id: 6,  
+        name: "YSL Libre", 
+        ref: "Libre-Ate Me", 
+        img: "img/img-005.png", 
+        desc: "El equilibrio perfecto entre la lavanda francesa y la flor de azahar marroquí.",
+        variants: [
+          { size: "20 ml", priceUSD: 19 },
+          { size: "50 ml", priceUSD: 34 }
+        ]
+      },
+      { 
+        id: 7,  
+        name: "JPG Le Male Elixir", 
+        ref: "Alpha Elixir", 
+        img: "img/alpha_elixir.jpg", 
+        desc: "Intenso y sensual con notas dulces de haba tonka, menta fresca y benjuí.",
+        variants: [
+          { size: "20 ml", priceUSD: 18 },
+          { size: "50 ml", priceUSD: 32 }
+        ]
+      },
+      { 
+        id: 8,  
+        name: "Tom Ford Electric Cherry", 
+        ref: "Cherry Spark", 
+        img: "img/img-006.png", 
+        desc: "Cereza ácida combinada con jazmín dulce y pimienta rosada vibrante.",
+        variants: [
+          { size: "20 ml", priceUSD: 23 },
+          { size: "50 ml", priceUSD: 38 }
+        ]
+      },
+      { 
+        id: 9,  
+        name: "Bleu de Chanel", 
+        ref: "Azure Depth", 
+        img: "img/img-007.png", 
+        desc: "Una fragancia aromática y amaderada de carácter independiente y elegante.",
+        variants: [
+          { size: "20 ml", priceUSD: 20 },
+          { size: "50 ml", priceUSD: 35 }
+        ]
+      },
+      { 
+        id: 10, 
+        name: "Azzaro Most Wanted", 
+        ref: "Wanted Dead or Adored", 
+        img: "img/img-010.png", 
+        desc: "Un aroma amaderado oriental de alta intensidad con cardamomo, toffee y madera de ámbar.",
+        variants: [
+          { size: "20 ml", priceUSD: 20 },
+          { size: "50 ml", priceUSD: 35 }
+        ]
+      },
+      { 
+        id: 11, 
+        name: "YSL Y", 
+        ref: "Why Not", 
+        img: "img/img-011.png", 
+        desc: "Aroma fresco y profundo con notas de bergamota, salvia y madera de cedro.",
+        variants: [
+          { size: "20 ml", priceUSD: 18 },
+          { size: "50 ml", priceUSD: 32 }
+        ]
+      },
+      { 
+        id: 12, 
+        name: "JPG Ultra Male", 
+        ref: "Alpha Noir", 
+        img: "img/img-012.png", 
+        desc: "Una explosión de pera dulce, lavanda negra y vainilla amaderada.",
+        variants: [
+          { size: "20 ml", priceUSD: 19 },
+          { size: "50 ml", priceUSD: 34 }
+        ]
+      },
+      { 
+        id: 13, 
+        name: "Viktor Rolf Spicebomb Extreme", 
+        ref: "Spice to Meet You", 
+        img: "img/img-013.png", 
+        desc: "Combinación explosiva de especias cálidas, comino, canela y tabaco rico.",
+        variants: [
+          { size: "20 ml", priceUSD: 19 },
+          { size: "50 ml", priceUSD: 33 }
+        ]
+      },
+      { 
+        id: 14, 
+        name: "Tom Ford Ombré Leather", 
+        ref: "Leather Late Than Never", 
+        img: "img/img-014.png", 
+        desc: "Cuero texturizado, cardamomo y jazmín que proyectan libertad y profundidad.",
+        variants: [
+          { size: "20 ml", priceUSD: 22 },
+          { size: "50 ml", priceUSD: 38 }
+        ]
+      },
+      { 
+        id: 15, 
+        name: "Born in Roma Intense", 
+        ref: "When in Roma", 
+        img: "img/img-015.png", 
+        desc: "Un homenaje moderno con notas de vainilla magnética y jazmín solar.",
+        variants: [
+          { size: "20 ml", priceUSD: 21 },
+          { size: "50 ml", priceUSD: 36 }
+        ]
+      },
+      { 
+        id: 17, 
+        name: "Ex Nihilo Blue Talisman", 
+        ref: "Ya Blue Me Away", 
+        img: "img/img-017.png", 
+        desc: "Pera, bergamota, flor de azahar y maderas que crean un amuleto olfativo único.",
+        variants: [
+          { size: "20 ml", priceUSD: 24 },
+          { size: "50 ml", priceUSD: 40 }
+        ]
+      },
+      { 
+        id: 18, 
+        name: "Acqua di Giò Profumo", 
+        ref: "Holy Ship You Clean Up Nice", 
+        img: "img/holy_ship.jpg", 
+        desc: "Frescura marina combinada con la profundidad del incienso y el pachulí.",
+        variants: [
+          { size: "20 ml", priceUSD: 20 },
+          { size: "50 ml", priceUSD: 35 }
+        ]
+      },
+      /* NUEVOS PRODUCTOS EXCLUSIVOS DE 30 ML */
+      { 
+        id: 19, 
+        name: "Miss Dior", 
+        ref: "Cherry On Top", 
+        img: "img/cherry_on_top.jpg", 
+        desc: "Un bouquet floral elegante con notas de rosa de Grasse, peonía y un toque fresco y romántico.",
+        variants: [
+          { size: "30 ml", priceUSD: 25 }
+        ]
+      },
+      { 
+        id: 20, 
+        name: "Tom Ford Tobacco Vanille", 
+        ref: "Cigars & Ice Cream", 
+        img: "img/cigars_ice_cream.jpg", 
+        desc: "Una opulenta mezcla de hoja de tabaco, especias aromáticas, vainilla dulce y cacao suave.",
+        variants: [
+          { size: "30 ml", priceUSD: 28 }
+        ]
+      },
+      { 
+        id: 21, 
+        name: "YSL MYSLF", 
+        ref: "Eternal Bergamot", 
+        img: "img/eternal_bergamot.jpg", 
+        desc: "Una fragancia floral-amaderada moderna centrada en la bergamota fresca y la flor de azahar.",
+        variants: [
+          { size: "30 ml", priceUSD: 26 }
+        ]
+      },
+      { 
+        id: 22, 
+        name: "Paco Rabanne Invictus", 
+        ref: "Exor", 
+        img: "img/exor.jpg", 
+        desc: "Aroma fresco y vibrante con acorde marino, pomelo radiante y un fondo de madera de gualaco.",
+        variants: [
+          { size: "30 ml", priceUSD: 24 }
+        ]
+      },
+      { 
+        id: 23, 
+        name: "Louis Vuitton Ombre Nomade", 
+        ref: "Incense Oud", 
+        img: "img/incense_oud.jpg", 
+        desc: "Un viaje sensorial intenso cargado de madera de Oud, lágrimas de incienso y toques de frambuesa.",
+        variants: [
+          { size: "30 ml", priceUSD: 30 }
+        ]
+      },
+      { 
+        id: 24, 
+        name: "Versace Eros", 
+        ref: "Mint Ocean", 
+        img: "img/mint_ocean.jpg", 
+        desc: "Una explosión de frescura con menta, manzana verde y limón italiano respaldados por haba tonka.",
+        variants: [
+          { size: "30 ml", priceUSD: 25 }
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       ESTADO DEL CARRITO Y LÓGICA DE LA APLICACIÓN
+       ========================================================================== */
+    let cart = [];
+
+    const catalogGrid = document.getElementById('catalogGrid');
+    const searchInput = document.getElementById('searchInput');
+    const cartToggle = document.getElementById('cartToggle');
+    const closeCart = document.getElementById('closeCart');
+    const cartDrawer = document.getElementById('cartDrawer');
+    const overlay = document.getElementById('overlay');
+    const cartItems = document.getElementById('cartItems');
+    const cartCount = document.getElementById('cartCount');
+    const cartTotalUSD = document.getElementById('cartTotalUSD');
+    const sendWhatsApp = document.getElementById('sendWhatsApp');
+
+    // RENDERIZAR TARJETAS DE PRODUCTOS
+    function renderProducts(items) {
+      catalogGrid.innerHTML = '';
+      if (items.length === 0) {
+        catalogGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No se encontraron perfumes que coincidan con la búsqueda.</p>`;
+        return;
+      }
+
+      items.forEach(product => {
+        const variantOptions = product.variants.map((v, index) => 
+          `<option value="${index}">${v.size} - $${v.priceUSD} USD</option>`
+        ).join('');
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-img-wrapper">
+            <img src="${product.img}" alt="${product.ref}" onerror="this.src='https://via.placeholder.com/300x300?text=Perfume'">
+          </div>
+          <div class="card-content">
+            <h3 class="card-title">${product.ref}</h3>
+            <div class="card-ref">Inspirado en ${product.name}</div>
+            <p class="card-desc">${product.desc}</p>
+            <div class="card-actions">
+              <select class="variant-select" id="variant-${product.id}">
+                ${variantOptions}
+              </select>
+              <button class="btn-add-cart" onclick="addToCart(${product.id})">
+                <i class="fa-solid fa-plus"></i> Agregar al Carrito
+              </button>
+            </div>
+          </div>
+        `;
+        catalogGrid.appendChild(card);
+      });
+    }
+
+    // AGREGAR PRODUCTO AL CARRITO
+    window.addToCart = function(productId) {
+      const product = products.find(p => p.id === productId);
+      const variantSelect = document.getElementById(`variant-${productId}`);
+      const selectedIndex = parseInt(variantSelect.value);
+      const selectedVariant = product.variants[selectedIndex];
+
+      const cartItemIndex = cart.findIndex(item => item.id === productId && item.size === selectedVariant.size);
+
+      if (cartItemIndex > -1) {
+        cart[cartItemIndex].quantity += 1;
+      } else {
+        cart.push({
+          id: product.id,
+          ref: product.ref,
+          name: product.name,
+          img: product.img,
+          size: selectedVariant.size,
+          priceUSD: selectedVariant.priceUSD,
+          quantity: 1
+        });
+      }
+
+      updateCart();
+      openCartDrawer();
+    };
+
+    // ELIMINAR O CAMBIAR CANTIDADES
+    window.removeFromCart = function(index) {
+      cart.splice(index, 1);
+      updateCart();
+    };
+
+    window.changeQuantity = function(index, delta) {
+      cart[index].quantity += delta;
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+      updateCart();
+    };
+
+    // ACTUALIZAR VISTA DEL CARRITO
+    function updateCart() {
+      cartItems.innerHTML = '';
+      let totalUSD = 0;
+      let totalCount = 0;
+
+      cart.forEach((item, index) => {
+        totalUSD += item.priceUSD * item.quantity;
+        totalCount += item.quantity;
+
+        const itemEl = document.createElement('div');
+        itemEl.className = 'cart-item';
+        itemEl.innerHTML = `
+          <img src="${item.img}" alt="${item.ref}">
+          <div class="cart-item-details">
+            <div style="font-weight: 600; font-size: 0.95rem;">${item.ref}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">${item.size} - $${item.priceUSD} USD</div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+              <button onclick="changeQuantity(${index}, -1)" style="width: 20px; height: 20px; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;">-</button>
+              <span style="font-size: 0.85rem; font-weight: 600;">${item.quantity}</span>
+              <button onclick="changeQuantity(${index}, 1)" style="width: 20px; height: 20px; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;">+</button>
+              <button onclick="removeFromCart(${index})" style="margin-left: auto; border: none; background: transparent; color: #ef4444; cursor: pointer; font-size: 0.85rem;"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+        cartItems.appendChild(itemEl);
+      });
+
+      cartCount.textContent = totalCount;
+      cartTotalUSD.textContent = `$${totalUSD} USD`;
+
+      // GENERAR MENSAJE PARA WHATSAPP
+      if (cart.length > 0) {
+        let message = "Hola! Quisiera realizar el siguiente pedido:%0A%0A";
+        cart.forEach(item => {
+          message += `• *${item.ref}* (${item.size}) - Cantidad: ${item.quantity} -> $${item.priceUSD * item.quantity} USD%0A`;
+        });
+        message += `%0A*Total a pagar:* $${totalUSD} USD`;
+        sendWhatsApp.href = `https://wa.me/1234567890?text=${message}`; // Reemplazar con número real
+      } else {
+        sendWhatsApp.href = "#";
+      }
+    }
+
+    // CONTROL DEL DRAWER DEL CARRITO
+    function openCartDrawer() {
+      cartDrawer.classList.add('open');
+      overlay.classList.add('active');
+    }
+
+    function closeCartDrawer() {
+      cartDrawer.classList.remove('open');
+      overlay.classList.remove('active');
+    }
+
+    cartToggle.addEventListener('click', openCartDrawer);
+    closeCart.addEventListener('click', closeCartDrawer);
+    overlay.addEventListener('click', closeCartDrawer);
+
+    // FILTRO DE BÚSQUEDA
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      const filtered = products.filter(p => 
+        p.ref.toLowerCase().includes(term) || 
+        p.name.toLowerCase().includes(term)
+      );
+      renderProducts(filtered);
+    });
+
+    // INICIALIZACIÓN
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts(products);
+    });
+  </script>
+</body>
+</html>
