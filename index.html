@@ -1,1205 +1,269 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KOVA Essentials · Catálogo</title>
-  <style>
-    /* VARIABLES DE COLOR - MODO NOCHE / OSCURO (POR DEFECTO) */
-    :root {
-      --bg: #0a0a0a;
-      --card: #141414;
-      --border: #2a2a2a;
-      --text: #f0f0f0;
-      --muted: #888;
-      --accent: #c9a84c;
-      --green: #25d366;
-      --danger: #e74c3c;
-      --header-bg: rgba(10, 10, 10, 0.95);
-      --input-bg: #1a1a1a;
-      --hero-overlay-start: rgba(10, 10, 10, 0.55);
-      --hero-overlay-end: rgba(10, 10, 10, 0.95);
-    }
-
-    /* DETECCIÓN AUTOMÁTICA DE MODO DÍA / CLARO SEGÚN EL TELÉFONO */
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8f9fa;
-        --card: #ffffff;
-        --border: #e2e8f0;
-        --text: #1a1a1a;
-        --muted: #666666;
-        --accent: #b38e2d;
-        --header-bg: rgba(255, 255, 255, 0.95);
-        --input-bg: #f1f5f9;
-        --hero-overlay-start: rgba(255, 255, 255, 0.65);
-        --hero-overlay-end: rgba(248, 249, 250, 0.98);
-      }
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.4;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--header-bg);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      transition: background 0.3s, border-color 0.3s;
-    }
-
-    .logo {
-      text-align: center;
-      flex: 1;
-    }
-    .logo h1 {
-      font-size: 1.8rem;
-      font-weight: 300;
-      letter-spacing: 6px;
-      color: var(--text);
-    }
-    .logo span {
-      display: block;
-      font-size: 0.65rem;
-      letter-spacing: 4px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .currency-toggle {
-      display: flex;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .currency-toggle button {
-      background: transparent;
-      border: none;
-      color: var(--muted);
-      padding: 8px 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .currency-toggle button.active {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .cart-btn {
-      position: relative;
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text);
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .cart-count {
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* SECCIÓN PORTADA CON CARRUSEL DE IMÁGENES DE FONDO */
-    .hero-section {
-      position: relative;
-      width: 100%;
-      min-height: 80vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 60px 20px;
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
-    }
-
-    .hero-slider {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-    }
-
-    .hero-slide {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 1.5s ease-in-out, transform 8s ease;
-      transform: scale(1.05);
-    }
-
-    .hero-slide.active {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, var(--hero-overlay-start) 0%, var(--hero-overlay-end) 100%);
-      z-index: 2;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 3;
-      max-width: 750px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .hero-title {
-      font-size: 2.8rem;
-      font-weight: 300;
-      letter-spacing: 8px;
-      color: var(--text);
-      text-transform: uppercase;
-    }
-
-    .hero-subtitle {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 2px;
-      font-style: italic;
-    }
-
-    .hero-description {
-      font-size: 0.95rem;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 650px;
-    }
-
-    .hero-btn {
-      margin-top: 10px;
-      display: inline-block;
-      background: var(--accent);
-      color: #ffffff;
-      padding: 14px 28px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-decoration: none;
-      transition: transform 0.2s, background 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .hero-btn:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.1);
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 30px auto 0;
-      padding: 0 16px 100px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .product-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: transform 0.2s, border-color 0.2s, background 0.3s;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-    }
-    .product-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-    }
-
-    .product-img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: contain;
-      background: var(--input-bg);
-      padding: 8px;
-    }
-
-    .product-body {
-      padding: 14px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .product-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .product-ref {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    .product-price {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--accent);
-      margin-top: 4px;
-    }
-
-    .variant-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .variant-row label {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-    .variant-select {
-      flex: 1;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 6px;
-      padding: 6px 8px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      outline: none;
-    }
-
-    .qty-stepper {
-      display: flex;
-      align-items: center;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      width: fit-content;
-    }
-    .qty-stepper button {
-      background: transparent;
-      border: none;
-      color: var(--accent);
-      width: 32px;
-      height: 32px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .qty-stepper button:hover {
-      background: rgba(0,0,0,0.05);
-    }
-    .qty-stepper span {
-      padding: 0 10px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .add-btn {
-      width: 100%;
-      margin-top: 10px;
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .add-btn:hover {
-      background: var(--accent);
-      color: #ffffff;
-    }
-
-    /* Modal de Detalle */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 300;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s;
-      padding: 16px;
-    }
-    .modal-overlay.open {
-      opacity: 1;
-      visibility: visible;
-    }
-    .modal-content {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      max-width: 550px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 24px;
-      position: relative;
-    }
-    .close-modal {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: transparent;
-      border: none;
-      color: var(--muted);
-      font-size: 1.8rem;
-      cursor: pointer;
-    }
-    .modal-img {
-      width: 100%;
-      max-height: 280px;
-      object-fit: contain;
-      background: var(--input-bg);
-      border-radius: 12px;
-      padding: 12px;
-    }
-    .modal-body {
-      margin-top: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .modal-title { font-size: 1.3rem; font-weight: 700; color: var(--text); }
-    .modal-ref { font-size: 0.85rem; color: var(--muted); }
-    .modal-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
-    .modal-price { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
-    
-    .modal-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .buy-now-btn {
-      background: var(--accent);
-      color: #ffffff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .add-continue-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    /* Cart Panel */
-    .cart-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 200;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s;
-    }
-    .cart-overlay.open {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .cart-panel {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: min(380px, 100%);
-      height: 100%;
-      background: var(--card);
-      border-left: 1px solid var(--border);
-      z-index: 210;
-      transform: translateX(100%);
-      transition: transform 0.3s;
-      display: flex;
-      flex-direction: column;
-    }
-    .cart-overlay.open .cart-panel {
-      transform: translateX(0);
-    }
-
-    .cart-header {
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cart-header h2 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .close-cart {
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    .cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-    }
-
-    .cart-item {
-      display: flex;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-      align-items: center;
-    }
-    .cart-item img {
-      width: 60px;
-      height: 60px;
-      object-fit: contain;
-      background: var(--input-bg);
-      border-radius: 8px;
-    }
-    .cart-item-info {
-      flex: 1;
-    }
-    .cart-item-name {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .cart-item-meta {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-    .cart-item-price {
-      font-size: 0.9rem;
-      color: var(--accent);
-      margin-top: 4px;
-    }
-    .remove-item {
-      background: none;
-      border: none;
-      color: var(--danger);
-      cursor: pointer;
-      font-size: 0.8rem;
-      margin-top: 4px;
-    }
-
-    .cart-footer {
-      padding: 16px 20px 24px;
-      border-top: 1px solid var(--border);
-    }
-    .cart-total {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-      color: var(--text);
-    }
-    .cart-total span:last-child {
-      color: var(--accent);
-    }
-
-    .whatsapp-btn {
-      width: 100%;
-      background: var(--green);
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.2s;
-    }
-    .whatsapp-btn:hover {
-      background: #1ebe57;
-    }
-    .whatsapp-btn:disabled {
-      background: #888;
-      color: #ccc;
-      cursor: not-allowed;
-    }
-
-    .empty-cart {
-      text-align: center;
-      color: var(--muted);
-      padding: 40px 20px;
-      font-size: 0.95rem;
-    }
-
-    .disclaimer {
-      text-align: center;
-      font-size: 0.7rem;
-      color: var(--muted);
-      margin-top: 40px;
-      padding: 0 20px;
-    }
-
-    @media (max-width: 600px) {
-      .hero-title { font-size: 1.8rem; letter-spacing: 4px; }
-      .hero-subtitle { font-size: 1rem; }
-      .hero-description { font-size: 0.85rem; }
-      .logo h1 { font-size: 1.4rem; letter-spacing: 3px; }
-      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-      .product-body { padding: 10px; }
-      .product-name { font-size: 0.85rem; }
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <div class="logo">
-    <h1>KOVA</h1>
-    <span>ESSENTIALS</span>
-  </div>
-  <div class="header-actions">
-    <div class="currency-toggle">
-      <button id="btn-usd" class="active" onclick="setCurrency('USD')">USD</button>
-      <button id="btn-eur" onclick="setCurrency('EUR')">EUR</button>
-      <button id="btn-cup" onclick="setCurrency('CUP')">CUP</button>
-    </div>
-    <button class="cart-btn" onclick="openCart()">
-      🛒
-      <span class="cart-count" id="cart-count">0</span>
-    </button>
-  </div>
-</header>
-
-<!-- PORTADA ENCABEZADO CON CARRUSEL DE TRES IMÁGENES -->
-<section class="hero-section">
-  <div class="hero-slider">
-    <div class="hero-slide active" style="background-image: url('img/portada.jpg');"></div>
-    <div class="hero-slide" style="background-image: url('img/image_10.png');"></div>
-    <div class="hero-slide" style="background-image: url('img/image_11.png');"></div>
-  </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1 class="hero-title">KOVA ESSENTIALS</h1>
-    <div class="hero-subtitle">Esencia que habla por ti.</div>
-    <p class="hero-description">
-      Descubre una selección de fragancias y productos cuidadosamente elegidos para quienes buscan destacar sin perder su esencia. En KOVA creemos que el estilo está en los detalles: aromas, presencia y personalidad reunidos en una propuesta moderna, accesible y sofisticada.
-    </p>
-    <a href="#catalogo" class="hero-btn">Encuentra tu esencia. Hazla parte de ti.</a>
-  </div>
-</section>
-
-<main id="catalogo">
-  <div class="grid" id="grid-products"></div>
-
-  <p class="disclaimer">
-    Los productos mostrados son fragancias de inspiración; las marcas mencionadas se utilizan únicamente para identificar la referencia olfativa.
-  </p>
-</main>
-
-<!-- Modal de Detalle -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <button class="close-modal" onclick="closeModal()">&times;</button>
-    <img id="modal-img" class="modal-img" src="" alt="" />
-    <div class="modal-body">
-      <div id="modal-title" class="modal-title"></div>
-      <div id="modal-ref" class="modal-ref"></div>
-      <div id="modal-desc" class="modal-desc"></div>
-      
-      <div class="variant-row" style="margin-top: 6px;">
-        <label>Tamaño:</label>
-        <select class="variant-select" id="modal-variant-select" onchange="onModalVariantChange()"></select>
-      </div>
-
-      <div id="modal-price" class="modal-price"></div>
-      
-      <div class="qty-stepper" style="margin-top: 6px;">
-        <button onclick="adjustModalQty(-1)">-</button>
-        <span id="modal-qty">1</span>
-        <button onclick="adjustModalQty(1)">+</button>
-      </div>
-
-      <div class="modal-actions">
-        <button class="buy-now-btn" onclick="buyNowFromModal()">Comprar Ya</button>
-        <button class="add-continue-btn" onclick="addFromModal()">Añadir y seguir explorando</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Cart -->
-<div class="cart-overlay" id="cart-overlay" onclick="closeCart(event)">
-  <div class="cart-panel" onclick="event.stopPropagation()">
-    <div class="cart-header">
-      <h2>Tu pedido</h2>
-      <button class="close-cart" onclick="closeCart()">&times;</button>
-    </div>
-    <div class="cart-items" id="cart-items">
-      <div class="empty-cart">El carrito está vacío</div>
-    </div>
-    <div class="cart-footer">
-      <div class="cart-total">
-        <span>Total</span>
-        <span id="cart-total">$0</span>
-      </div>
-      <button class="whatsapp-btn" id="wa-btn" disabled onclick="sendOrder()">
-        <span>📱</span> Pedir por WhatsApp
-      </button>
-    </div>
-  </div>
-</div>
-
-<script>
-  const WHATSAPP_NUMBER = "5355360008";
-  const RATE_CUP = 740;  // 1 USD = 740 CUP
-  const RATE_EUR_CUP = 840; // 1 EUR = 840 CUP
-  const USD_TO_EUR = RATE_CUP / RATE_EUR_CUP;
-
-  const products = [
-    { 
-      id: 1,  
-      name: "1 Million", 
-      ref: "Gold Digger", 
-      img: "img/img-002.png", 
-      desc: "Una fragancia audaz con notas amaderadas y toques de cuero y especias, perfecta para destacar en la noche.",
-      variants: [
-        { size: "20 ml", priceUSD: 18 },
-        { size: "50 ml", priceUSD: 30 }
-      ]
-    },
-    { 
-      id: 2,  
-      name: "Tom Ford F'n Fabulous", 
-      ref: "F'n Marvelous", 
-      img: "img/img-003.png", 
-      desc: "Un aroma cuero-oriental sofisticado y exclusivo, enriquecido con almendra amarga y haba tonka.",
-      variants: [
-        { size: "20 ml", priceUSD: 22 },
-        { size: "50 ml", priceUSD: 38 }
-      ]
-    },
-    { 
-      id: 3,  
-      name: "Sauvage Elixir", 
-      ref: "Savage Spell", 
-      img: "img/img-004.png", 
-      desc: "Concentración extraordinaria de notas especiadas, lavanda fresca y un fondo de maderas ricas.",
-      variants: [
-        { size: "20 ml", priceUSD: 20 },
-        { size: "50 ml", priceUSD: 35 }
-      ]
-    },
-    { 
-      id: 4,  
-      name: "Christian Clive Blonde Amber", 
-      ref: "Goldie Luxe", 
-      img: "img/goldie_luxe.jpg", 
-      desc: "Ámbar cálido, notas frutales y un toque de ron que evocan elegancia atemporal.",
-      variants: [
-        { size: "20 ml", priceUSD: 25 },
-        { size: "50 ml", priceUSD: 42 }
-      ]
-    },
-    { 
-      id: 5,  
-      name: "Creed Queen of Silk", 
-      ref: "Sew Over You", 
-      img: "img/sew_over_you.jpg", 
-      desc: "Una esencia envolvente con flores blancas, vainilla suave y notas amaderadas delicadas.",
-      variants: [
-        { size: "20 ml", priceUSD: 24 },
-        { size: "50 ml", priceUSD: 40 }
-      ]
-    },
-    { 
-      id: 6,  
-      name: "YSL Libre", 
-      ref: "Libre-Ate Me", 
-      img: "img/img-005.png", 
-      desc: "El equilibrio perfecto entre la lavanda francesa y la flor de azahar marroquí.",
-      variants: [
-        { size: "20 ml", priceUSD: 19 },
-        { size: "50 ml", priceUSD: 34 }
-      ]
-    },
-    { 
-      id: 7,  
-      name: "JPG Le Male Elixir", 
-      ref: "Alpha Elixir", 
-      img: "img/alpha_elixir.jpg", 
-      desc: "Intenso y sensual con notas dulces de haba tonka, menta fresca y benjuí.",
-      variants: [
-        { size: "20 ml", priceUSD: 18 },
-        { size: "50 ml", priceUSD: 32 }
-      ]
-    },
-    { 
-      id: 8,  
-      name: "Tom Ford Electric Cherry", 
-      ref: "Cherry Spark", 
-      img: "img/img-006.png", 
-      desc: "Cereza ácida combinada con jazmín dulce y pimienta rosada vibrante.",
-      variants: [
-        { size: "20 ml", priceUSD: 23 },
-        { size: "50 ml", priceUSD: 38 }
-      ]
-    },
-    { 
-      id: 9,  
-      name: "Bleu de Chanel", 
-      ref: "Azure Depth", 
-      img: "img/img-007.png", 
-      desc: "Una fragancia aromática y amaderada de carácter independiente y elegante.",
-      variants: [
-        { size: "20 ml", priceUSD: 20 },
-        { size: "50 ml", priceUSD: 35 }
-      ]
-    },
-    { 
-      id: 10, 
-      name: "Azzaro Most Wanted", 
-      ref: "Wanted Dead or Adored", 
-      img: "img/img-010.png", 
-      desc: "Un aroma amaderado oriental de alta intensidad con cardamomo, toffee y madera de ámbar.",
-      variants: [
-        { size: "20 ml", priceUSD: 20 },
-        { size: "50 ml", priceUSD: 35 }
-      ]
-    },
-    { 
-      id: 11, 
-      name: "YSL Y", 
-      ref: "Why Not", 
-      img: "img/img-011.png", 
-      desc: "Aroma fresco y profundo con notas de bergamota, salvia y madera de cedro.",
-      variants: [
-        { size: "20 ml", priceUSD: 18 },
-        { size: "50 ml", priceUSD: 32 }
-      ]
-    },
-    { 
-      id: 12, 
-      name: "JPG Ultra Male", 
-      ref: "Alpha Noir", 
-      img: "img/img-012.png", 
-      desc: "Una explosión de pera dulce, lavanda negra y vainilla amaderada.",
-      variants: [
-        { size: "20 ml", priceUSD: 19 },
-        { size: "50 ml", priceUSD: 34 }
-      ]
-    },
-    { 
-      id: 13, 
-      name: "Viktor Rolf Spicebomb Extreme", 
-      ref: "Spice to Meet You", 
-      img: "img/img-013.png", 
-      desc: "Combinación explosiva de especias cálidas, comino, canela y tabaco rico.",
-      variants: [
-        { size: "20 ml", priceUSD: 19 },
-        { size: "50 ml", priceUSD: 33 }
-      ]
-    },
-    { 
-      id: 14, 
-      name: "Tom Ford Ombré Leather", 
-      ref: "Leather Late Than Never", 
-      img: "img/img-014.png", 
-      desc: "Cuero texturizado, cardamomo y jazmín que proyectan libertad y profundidad.",
-      variants: [
-        { size: "20 ml", priceUSD: 22 },
-        { size: "50 ml", priceUSD: 38 }
-      ]
-    },
-    { 
-      id: 15, 
-      name: "Born in Roma Intense", 
-      ref: "When in Roma", 
-      img: "img/img-015.png", 
-      desc: "Un homenaje moderno con notas de vainilla magnética y jazmín solar.",
-      variants: [
-        { size: "20 ml", priceUSD: 21 },
-        { size: "50 ml", priceUSD: 36 }
-      ]
-    },
-    { 
-      id: 17, 
-      name: "Ex Nihilo Blue Talisman", 
-      ref: "Ya Blue Me Away", 
-      img: "img/img-017.png", 
-      desc: "Pera, bergamota, flor de azahar y maderas que crean un amuleto olfativo único.",
-      variants: [
-        { size: "20 ml", priceUSD: 24 },
-        { size: "50 ml", priceUSD: 40 }
-      ]
-    },
-    { 
-      id: 18, 
-      name: "Acqua di Giò Profumo", 
-      ref: "Holy Ship You Clean Up Nice", 
-      img: "img/holy_ship.jpg", 
-      desc: "Frescura marina combinada con la profundidad del incienso y el pachulí.",
-      variants: [
-        { size: "20 ml", priceUSD: 20 },
-        { size: "50 ml", priceUSD: 35 }
-      ]
-    }
-  ];
-
-  let currency = "USD";
-  let cart = [];
-  let tempQuantities = {}; 
-  let tempVariants = {}; 
-  let currentModalProductId = null;
-  let currentModalQty = 1;
-
-  // Lógica del Carrusel de la Portada
-  let currentSlide = 0;
-  const slides = document.querySelectorAll('.hero-slide');
-  
-  function nextSlide() {
-    if(slides.length > 0) {
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
-    }
+// Arreglo completo de productos
+const products = [
+  { 
+    id: 1,  
+    name: "1 Million", 
+    ref: "Gold Digger", 
+    img: "img/img-002.png", 
+    desc: "Una fragancia audaz con notas amaderadas y toques de cuero y especias, perfecta para destacar en la noche.",
+    variants: [
+      { size: "20 ml", priceUSD: 18 },
+      { size: "50 ml", priceUSD: 30 }
+    ]
+  },
+  { 
+    id: 2,  
+    name: "Tom Ford F'n Fabulous", 
+    ref: "F'n Marvelous", 
+    img: "img/img-003.png", 
+    desc: "Un aroma cuero-oriental sofisticado y exclusivo, enriquecido con almendra amarga y haba tonka.",
+    variants: [
+      { size: "20 ml", priceUSD: 22 },
+      { size: "50 ml", priceUSD: 38 }
+    ]
+  },
+  { 
+    id: 3,  
+    name: "Sauvage Elixir", 
+    ref: "Savage Spell", 
+    img: "img/img-004.png", 
+    desc: "Concentración extraordinaria de notas especiadas, lavanda fresca y un fondo de maderas ricas.",
+    variants: [
+      { size: "20 ml", priceUSD: 20 },
+      { size: "50 ml", priceUSD: 35 }
+    ]
+  },
+  { 
+    id: 4,  
+    name: "Christian Clive Blonde Amber", 
+    ref: "Goldie Luxe", 
+    img: "img/goldie_luxe.jpg", 
+    desc: "Ámbar cálido, notas frutales y un toque de ron que evocan elegancia atemporal.",
+    variants: [
+      { size: "20 ml", priceUSD: 25 },
+      { size: "50 ml", priceUSD: 42 }
+    ]
+  },
+  { 
+    id: 5,  
+    name: "Creed Queen of Silk", 
+    ref: "Sew Over You", 
+    img: "img/sew_over_you.jpg", 
+    desc: "Una esencia envolvente con flores blancas, vainilla suave y notas amaderadas delicadas.",
+    variants: [
+      { size: "20 ml", priceUSD: 24 },
+      { size: "50 ml", priceUSD: 40 }
+    ]
+  },
+  { 
+    id: 6,  
+    name: "YSL Libre", 
+    ref: "Libre-Ate Me", 
+    img: "img/img-005.png", 
+    desc: "El equilibrio perfecto entre la lavanda francesa y la flor de azahar marroquí.",
+    variants: [
+      { size: "20 ml", priceUSD: 19 },
+      { size: "50 ml", priceUSD: 34 }
+    ]
+  },
+  { 
+    id: 7,  
+    name: "JPG Le Male Elixir", 
+    ref: "Alpha Elixir", 
+    img: "img/alpha_elixir.jpg", 
+    desc: "Intenso y sensual con notas dulces de haba tonka, menta fresca y benjuí.",
+    variants: [
+      { size: "20 ml", priceUSD: 18 },
+      { size: "50 ml", priceUSD: 32 }
+    ]
+  },
+  { 
+    id: 8,  
+    name: "Tom Ford Electric Cherry", 
+    ref: "Cherry Spark", 
+    img: "img/img-006.png", 
+    desc: "Cereza ácida combinada con jazmín dulce y pimienta rosada vibrante.",
+    variants: [
+      { size: "20 ml", priceUSD: 23 },
+      { size: "50 ml", priceUSD: 38 }
+    ]
+  },
+  { 
+    id: 9,  
+    name: "Bleu de Chanel", 
+    ref: "Azure Depth", 
+    img: "img/img-007.png", 
+    desc: "Una fragancia aromática y amaderada de carácter independiente y elegante.",
+    variants: [
+      { size: "20 ml", priceUSD: 20 },
+      { size: "50 ml", priceUSD: 35 }
+    ]
+  },
+  { 
+    id: 10, 
+    name: "Azzaro Most Wanted", 
+    ref: "Wanted Dead or Adored", 
+    img: "img/img-010.png", 
+    desc: "Un aroma amaderado oriental de alta intensidad con cardamomo, toffee y madera de ámbar.",
+    variants: [
+      { size: "20 ml", priceUSD: 20 },
+      { size: "50 ml", priceUSD: 35 }
+    ]
+  },
+  { 
+    id: 11, 
+    name: "YSL Y", 
+    ref: "Why Not", 
+    img: "img/img-011.png", 
+    desc: "Aroma fresco y profundo con notas de bergamota, salvia y madera de cedro.",
+    variants: [
+      { size: "20 ml", priceUSD: 18 },
+      { size: "50 ml", priceUSD: 32 }
+    ]
+  },
+  { 
+    id: 12, 
+    name: "JPG Ultra Male", 
+    ref: "Alpha Noir", 
+    img: "img/img-012.png", 
+    desc: "Una explosión de pera dulce, lavanda negra y vainilla amaderada.",
+    variants: [
+      { size: "20 ml", priceUSD: 19 },
+      { size: "50 ml", priceUSD: 34 }
+    ]
+  },
+  { 
+    id: 13, 
+    name: "Viktor Rolf Spicebomb Extreme", 
+    ref: "Spice to Meet You", 
+    img: "img/img-013.png", 
+    desc: "Combinación explosiva de especias cálidas, comino, canela y tabaco rico.",
+    variants: [
+      { size: "20 ml", priceUSD: 19 },
+      { size: "50 ml", priceUSD: 33 }
+    ]
+  },
+  { 
+    id: 14, 
+    name: "Tom Ford Ombré Leather", 
+    ref: "Leather Late Than Never", 
+    img: "img/img-014.png", 
+    desc: "Cuero texturizado, cardamomo y jazmín que proyectan libertad y profundidad.",
+    variants: [
+      { size: "20 ml", priceUSD: 22 },
+      { size: "50 ml", priceUSD: 38 }
+    ]
+  },
+  { 
+    id: 15, 
+    name: "Born in Roma Intense", 
+    ref: "When in Roma", 
+    img: "img/img-015.png", 
+    desc: "Un homenaje moderno con notas de vainilla magnética y jazmín solar.",
+    variants: [
+      { size: "20 ml", priceUSD: 21 },
+      { size: "50 ml", priceUSD: 36 }
+    ]
+  },
+  { 
+    id: 17, 
+    name: "Ex Nihilo Blue Talisman", 
+    ref: "Ya Blue Me Away", 
+    img: "img/img-017.png", 
+    desc: "Pera, bergamota, flor de azahar y maderas que crean un amuleto olfativo único.",
+    variants: [
+      { size: "20 ml", priceUSD: 24 },
+      { size: "50 ml", priceUSD: 40 }
+    ]
+  },
+  { 
+    id: 18, 
+    name: "Acqua di Giò Profumo", 
+    ref: "Holy Ship You Clean Up Nice", 
+    img: "img/holy_ship.jpg", 
+    desc: "Frescura marina combinada con la profundidad del incienso y el pachulí.",
+    variants: [
+      { size: "20 ml", priceUSD: 20 },
+      { size: "50 ml", priceUSD: 35 }
+    ]
+  },
+  /* NUEVOS PRODUCTOS (PRESENTACIÓN ÚNICA DE 30 ML) */
+  { 
+    id: 19, 
+    name: "Miss Dior", 
+    ref: "Cherry On Top", 
+    img: "img/cherry_on_top.jpg", 
+    desc: "Un bouquet floral elegante con notas de rosa de Grasse, peonía y un toque fresco y romántico.",
+    variants: [
+      { size: "30 ml", priceUSD: 25 }
+    ]
+  },
+  { 
+    id: 20, 
+    name: "Tom Ford Tobacco Vanille", 
+    ref: "Cigars & Ice Cream", 
+    img: "img/cigars_ice_cream.jpg", 
+    desc: "Una opulenta mezcla de hoja de tabaco, especias aromáticas, vainilla dulce y cacao suave.",
+    variants: [
+      { size: "30 ml", priceUSD: 28 }
+    ]
+  },
+  { 
+    id: 21, 
+    name: "YSL MYSLF", 
+    ref: "Eternal Bergamot", 
+    img: "img/eternal_bergamot.jpg", 
+    desc: "Una fragancia floral-amaderada moderna centrada en la bergamota fresca y la flor de azahar.",
+    variants: [
+      { size: "30 ml", priceUSD: 26 }
+    ]
+  },
+  { 
+    id: 22, 
+    name: "Paco Rabanne Invictus", 
+    ref: "Exor", 
+    img: "img/exor.jpg", 
+    desc: "Aroma fresco y vibrante con acorde marino, pomelo radiante y un fondo de madera de gualaco.",
+    variants: [
+      { size: "30 ml", priceUSD: 24 }
+    ]
+  },
+  { 
+    id: 23, 
+    name: "Louis Vuitton Ombre Nomade", 
+    ref: "Incense Oud", 
+    img: "img/incense_oud.jpg", 
+    desc: "Un viaje sensorial intenso cargado de madera de Oud, lágrimas de incienso y toques de frambuesa.",
+    variants: [
+      { size: "30 ml", priceUSD: 30 }
+    ]
+  },
+  { 
+    id: 24, 
+    name: "Versace Eros", 
+    ref: "Mint Ocean", 
+    img: "img/mint_ocean.jpg", 
+    desc: "Una explosión de frescura con menta, manzana verde y limón italiano respaldados por haba tonka.",
+    variants: [
+      { size: "30 ml", priceUSD: 25 }
+    ]
   }
-  setInterval(nextSlide, 5000);
+];
 
-  function formatPrice(usd) {
-    if (currency === "USD") {
-      return "$" + usd.toFixed(2);
-    } else if (currency === "EUR") {
-      return "€" + (usd * USD_TO_EUR).toFixed(2);
-    } else {
-      return (usd * RATE_CUP).toLocaleString("es-CU") + " CUP";
-    }
-  }
+// Función para renderizar los selectores de tamaño dinámicamente según cada producto
+function renderProductVariants(productId, selectContainerId) {
+  const product = products.find(p => p.id === productId);
+  const selectElement = document.getElementById(selectContainerId);
 
-  function renderProducts() {
-    const grid = document.getElementById("grid-products");
-    grid.innerHTML = "";
+  if (!product || !selectElement) return;
 
-    products.forEach(p => {
-      if (!tempQuantities[p.id]) tempQuantities[p.id] = 1;
-      if (tempVariants[p.id] === undefined) tempVariants[p.id] = 0;
+  selectElement.innerHTML = ""; // Limpia las opciones predeterminadas
 
-      const currentVariantIdx = tempVariants[p.id];
-      const selectedVariant = p.variants[currentVariantIdx];
-
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.onclick = () => openModal(p.id);
-
-      const variantOptionsHTML = p.variants.map((v, idx) => 
-        `<option value="${idx}" ${idx === currentVariantIdx ? 'selected' : ''}>${v.size}</option>`
-      ).join("");
-
-      card.innerHTML = `
-        <img class="product-img" src="${p.img}" alt="${p.name}" loading="lazy" />
-        <div class="product-body">
-          <div class="product-name">${p.name}</div>
-          <div class="product-ref">${p.ref}</div>
-          
-          <div class="variant-row" onclick="event.stopPropagation()">
-            <label>Tamaño:</label>
-            <select class="variant-select" onchange="changeCardVariant(${p.id}, this.value)">
-              ${variantOptionsHTML}
-            </select>
-          </div>
-
-          <div class="product-price" id="price-val-${p.id}">${formatPrice(selectedVariant.priceUSD)}</div>
-          
-          <div class="qty-stepper" onclick="event.stopPropagation()">
-            <button onclick="changeCardQty(${p.id}, -1)">-</button>
-            <span id="qty-val-${p.id}">${tempQuantities[p.id]}</span>
-            <button onclick="changeCardQty(${p.id}, 1)">+</button>
-          </div>
-
-          <button class="add-btn" onclick="event.stopPropagation(); addToCart(${p.id})">Agregar al carrito</button>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-  }
-
-  function changeCardVariant(id, variantIdx) {
-    tempVariants[id] = parseInt(variantIdx);
-    const p = products.find(x => x.id === id);
-    const selectedVariant = p.variants[tempVariants[id]];
-    document.getElementById(`price-val-${id}`).textContent = formatPrice(selectedVariant.priceUSD);
-  }
-
-  function changeCardQty(id, delta) {
-    tempQuantities[id] = Math.max(1, (tempQuantities[id] || 1) + delta);
-    document.getElementById(`qty-val-${id}`).textContent = tempQuantities[id];
-  }
-
-  function openModal(id) {
-    const p = products.find(x => x.id === id);
-    if (!p) return;
-
-    currentModalProductId = id;
-    currentModalQty = tempQuantities[id] || 1;
-
-    const currentVariantIdx = tempVariants[id] || 0;
-    const selectedVariant = p.variants[currentVariantIdx];
-
-    document.getElementById("modal-img").src = p.img;
-    document.getElementById("modal-title").textContent = p.name;
-    document.getElementById("modal-ref").textContent = p.ref;
-    document.getElementById("modal-desc").textContent = p.desc;
-    
-    const modalSelect = document.getElementById("modal-variant-select");
-    modalSelect.innerHTML = p.variants.map((v, idx) => 
-      `<option value="${idx}" ${idx === currentVariantIdx ? 'selected' : ''}>${v.size}</option>`
-    ).join("");
-
-    document.getElementById("modal-price").textContent = formatPrice(selectedVariant.priceUSD);
-    document.getElementById("modal-qty").textContent = currentModalQty;
-
-    document.getElementById("modal-overlay").classList.add("open");
-  }
-
-  function onModalVariantChange() {
-    if (!currentModalProductId) return;
-    const p = products.find(x => x.id === currentModalProductId);
-    const modalSelect = document.getElementById("modal-variant-select");
-    const variantIdx = parseInt(modalSelect.value);
-    
-    tempVariants[currentModalProductId] = variantIdx;
-    const selectedVariant = p.variants[variantIdx];
-    document.getElementById("modal-price").textContent = formatPrice(selectedVariant.priceUSD);
-    
-    renderProducts();
-  }
-
-  function closeModal(e) {
-    if (!e || e.target.id === "modal-overlay") {
-      document.getElementById("modal-overlay").classList.remove("open");
-    }
-  }
-
-  function adjustModalQty(delta) {
-    currentModalQty = Math.max(1, currentModalQty + delta);
-    document.getElementById("modal-qty").textContent = currentModalQty;
-  }
-
-  function addFromModal() {
-    if (currentModalProductId) {
-      tempQuantities[currentModalProductId] = currentModalQty;
-      addToCart(currentModalProductId);
-      closeModal();
-    }
-  }
-
-  function buyNowFromModal() {
-    if (currentModalProductId) {
-      tempQuantities[currentModalProductId] = currentModalQty;
-      addToCart(currentModalProductId);
-      closeModal();
-      openCart();
-    }
-  }
-
-  // AGREGADO SILENCIOSO: Añade el ítem y actualiza contador sin abrir el panel lateral del carrito
-  function addToCart(id) {
-    const p = products.find(x => x.id === id);
-    const qty = tempQuantities[id] || 1;
-    const variantIdx = tempVariants[id] || 0;
-    const selectedVariant = p.variants[variantIdx];
-
-    const existing = cart.find(i => i.id === id && i.size === selectedVariant.size);
-
-    if (existing) {
-      existing.qty += qty;
-    } else {
-      cart.push({ 
-        id: id, 
-        qty: qty, 
-        size: selectedVariant.size, 
-        priceUSD: selectedVariant.priceUSD 
-      });
-    }
-    
-    tempQuantities[id] = 1;
-    renderProducts();
-    updateCartUI();
-  }
-
-  function updateCartItemQty(index, delta) {
-    if (cart[index]) {
-      cart[index].qty += delta;
-      if (cart[index].qty <= 0) {
-        removeFromCart(index);
-      } else {
-        updateCartUI();
-      }
-    }
-  }
-
-  function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCartUI();
-  }
-
-  function updateCartUI() {
-    const countEl = document.getElementById("cart-count");
-    const itemsEl = document.getElementById("cart-items");
-    const totalEl = document.getElementById("cart-total");
-    const waBtn = document.getElementById("wa-btn");
-
-    const totalQty = cart.reduce((s, i) => s + i.qty, 0);
-    countEl.textContent = totalQty;
-
-    if (cart.length === 0) {
-      itemsEl.innerHTML = '<div class="empty-cart">El carrito está vacío</div>';
-      totalEl.textContent = formatPrice(0);
-      waBtn.disabled = true;
-      return;
-    }
-
-    let total = 0;
-    itemsEl.innerHTML = cart.map((item, index) => {
-      const p = products.find(x => x.id === item.id);
-      const sub = item.priceUSD * item.qty;
-      total += sub;
-      return `
-        <div class="cart-item">
-          <img src="${p.img}" alt="${p.name}" />
-          <div class="cart-item-info">
-            <div class="cart-item-name">${p.name}</div>
-            <div class="cart-item-meta">Tamaño: ${item.size}</div>
-            <div class="cart-item-price">${formatPrice(sub)}</div>
-            <button class="remove-item" onclick="removeFromCart(${index})">Eliminar</button>
-          </div>
-          <div class="qty-stepper">
-            <button onclick="updateCartItemQty(${index}, -1)">-</button>
-            <span>${item.qty}</span>
-            <button onclick="updateCartItemQty(${index}, 1)">+</button>
-          </div>
-        </div>
-      `;
-    }).join("");
-
-    totalEl.textContent = formatPrice(total);
-    waBtn.disabled = false;
-  }
-
-  function openCart() {
-    document.getElementById("cart-overlay").classList.add("open");
-  }
-
-  function closeCart(e) {
-    if (!e || e.target.id === "cart-overlay") {
-      document.getElementById("cart-overlay").classList.remove("open");
-    }
-  }
-
-  function setCurrency(cur) {
-    currency = cur;
-    document.getElementById("btn-usd").classList.toggle("active", cur === "USD");
-    document.getElementById("btn-eur").classList.toggle("active", cur === "EUR");
-    document.getElementById("btn-cup").classList.toggle("active", cur === "CUP");
-    
-    renderProducts();
-    updateCartUI();
-
-    if (currentModalProductId) {
-      const p = products.find(x => x.id === currentModalProductId);
-      const variantIdx = tempVariants[currentModalProductId] || 0;
-      document.getElementById("modal-price").textContent = formatPrice(p.variants[variantIdx].priceUSD);
-    }
-  }
-
-  function sendOrder() {
-    if (cart.length === 0) return;
-
-    let msg = "¡Hola! Quiero hacer el siguiente pedido de *KOVA Essentials*:%0A%0A";
-    let totalUSD = 0;
-
-    cart.forEach(item => {
-      const p = products.find(x => x.id === item.id);
-      const sub = item.priceUSD * item.qty;
-      totalUSD += sub;
-      msg += `• *${p.name}* (${item.size}) x${item.qty} — ${formatPrice(sub)}%0A`;
-    });
-
-    msg += `%0A*Total: ${formatPrice(totalUSD)}*`;
-    msg += `%0AMoneda seleccionada: ${currency}`;
-    msg += "%0A%0A¿Me confirmas disponibilidad y forma de pago?";
-
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-    window.open(url, "_blank");
-  }
-
-  renderProducts();
-  updateCartUI();
-</script>
-</body>
-</html>
+  product.variants.forEach(variant => {
+    const option = document.createElement("option");
+    option.value = variant.size;
+    option.textContent = `${variant.size} - $${variant.priceUSD} USD`;
+    selectElement.appendChild(option);
+  });
+}
 
