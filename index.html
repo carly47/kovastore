@@ -143,7 +143,7 @@
       justify-content: center;
     }
 
-    /* SECCIÓN PORTADA / HERO CON CARRUSEL DINÁMICO */
+    /* SECCIÓN PORTADA CON CARRUSEL DE IMÁGENES DE FONDO */
     .hero-section {
       position: relative;
       width: 100%;
@@ -237,32 +237,10 @@
       filter: brightness(1.1);
     }
 
-    /* BUSCADOR INTEGRADO */
-    .search-container {
-      max-width: 600px;
-      margin: 30px auto 20px;
-      padding: 0 16px;
-    }
-    .search-input {
-      width: 100%;
-      padding: 12px 18px;
-      border-radius: 25px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .search-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 8px rgba(201, 168, 76, 0.2);
-    }
-
     main {
       max-width: 1200px;
-      margin: 0 auto;
-      padding: 10px 16px 100px;
+      margin: 30px auto 0;
+      padding: 0 16px 100px;
     }
 
     .grid {
@@ -388,7 +366,7 @@
       color: #ffffff;
     }
 
-    /* Modal de Detalle de Producto */
+    /* Modal de Detalle */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -470,7 +448,7 @@
       cursor: pointer;
     }
 
-    /* Cart */
+    /* Cart Panel */
     .cart-overlay {
       position: fixed;
       inset: 0;
@@ -657,7 +635,7 @@
   </div>
 </header>
 
-<!-- PORTADA ENCABEZADO CON CARRUSEL DINÁMICO -->
+<!-- PORTADA ENCABEZADO CON CARRUSEL DE TRES IMÁGENES -->
 <section class="hero-section">
   <div class="hero-slider">
     <div class="hero-slide active" style="background-image: url('img/portada.jpg');"></div>
@@ -675,11 +653,6 @@
   </div>
 </section>
 
-<!-- BUSCADOR -->
-<div class="search-container">
-  <input type="text" id="search-input" class="search-input" placeholder="🔍 Buscar perfume o referencia..." oninput="filterProducts()" />
-</div>
-
 <main id="catalogo">
   <div class="grid" id="grid-products"></div>
 
@@ -688,7 +661,7 @@
   </p>
 </main>
 
-<!-- Modal de Detalle de Producto -->
+<!-- Modal de Detalle -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal-content" onclick="event.stopPropagation()">
     <button class="close-modal" onclick="closeModal()">&times;</button>
@@ -742,7 +715,6 @@
 </div>
 
 <script>
-  // ========== CONFIGURACIÓN ==========
   const WHATSAPP_NUMBER = "5355360008";
   const RATE_CUP = 740;  // 1 USD = 740 CUP
   const RATE_EUR_CUP = 840; // 1 EUR = 840 CUP
@@ -935,72 +907,6 @@
         { size: "20 ml", priceUSD: 20 },
         { size: "50 ml", priceUSD: 35 }
       ]
-    },
-    // NUEVAS ADICIONES DE PERFUMES
-    {
-      id: 19,
-      name: "Miss Dior",
-      ref: "Floral Romance",
-      img: "img/img-005.png",
-      desc: "Una elegancia floral cautivadora enriquecida con rosa de Grasse y destellos de bergamota.",
-      variants: [
-        { size: "20 ml", priceUSD: 20 },
-        { size: "50 ml", priceUSD: 35 }
-      ]
-    },
-    {
-      id: 20,
-      name: "Tom Ford Tobacco Vanille",
-      ref: "Smoky Velvet",
-      img: "img/img-003.png",
-      desc: "Aroma opulento de hoja de tabaco y especias cálidas complementado con dulce aroma de vainilla.",
-      variants: [
-        { size: "20 ml", priceUSD: 23 },
-        { size: "50 ml", priceUSD: 39 }
-      ]
-    },
-    {
-      id: 21,
-      name: "YSL MYSLF",
-      ref: "Modern Essence",
-      img: "img/img-011.png",
-      desc: "Un equilibrio sofisticado entre azahar de Marruecos, bergamota fresca y acordes de maderas ricas.",
-      variants: [
-        { size: "20 ml", priceUSD: 21 },
-        { size: "50 ml", priceUSD: 36 }
-      ]
-    },
-    {
-      id: 22,
-      name: "Paco Rabanne Invictus",
-      ref: "Victory Spirit",
-      img: "img/img-002.png",
-      desc: "Fragancia fresca y vigorizante con matices marinos, pomelo y un toque de hoja de laurel con ámbar.",
-      variants: [
-        { size: "20 ml", priceUSD: 18 },
-        { size: "50 ml", priceUSD: 32 }
-      ]
-    },
-    {
-      id: 23,
-      name: "Louis Vuitton Ombre Nomade",
-      ref: "Desert Oud",
-      img: "img/img-014.png",
-      desc: "Un viaje sensorial intenso cargado de madera de oud pura, lágrimas de incienso y toques de frambuesa.",
-      variants: [
-        { size: "20 ml", priceUSD: 26 },
-        { size: "50 ml", priceUSD: 45 }
-      ]
-    },
-    {
-      id: 24,
-      name: "Versace Eros",
-      ref: "Mythic Passion",
-      img: "img/img-007.png",
-      desc: "Carácter vibrante marcado por menta fresca, cáscara de limón italiano y notas envolventes de haba tonka.",
-      variants: [
-        { size: "30 ml", priceUSD: 24 }
-      ]
     }
   ];
 
@@ -1011,7 +917,7 @@
   let currentModalProductId = null;
   let currentModalQty = 1;
 
-  // Lógica del Carrusel
+  // Lógica del Carrusel de la Portada
   let currentSlide = 0;
   const slides = document.querySelectorAll('.hero-slide');
   
@@ -1034,24 +940,11 @@
     }
   }
 
-  function filterProducts() {
-    const query = document.getElementById("search-input").value.toLowerCase();
-    const filtered = products.filter(p => 
-      p.name.toLowerCase().includes(query) || p.ref.toLowerCase().includes(query)
-    );
-    renderProducts(filtered);
-  }
-
-  function renderProducts(productList = products) {
+  function renderProducts() {
     const grid = document.getElementById("grid-products");
     grid.innerHTML = "";
 
-    if (productList.length === 0) {
-      grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 40px 0;">No se encontraron resultados para tu búsqueda.</div>';
-      return;
-    }
-
-    productList.forEach(p => {
+    products.forEach(p => {
       if (!tempQuantities[p.id]) tempQuantities[p.id] = 1;
       if (tempVariants[p.id] === undefined) tempVariants[p.id] = 0;
 
@@ -1142,7 +1035,7 @@
     const selectedVariant = p.variants[variantIdx];
     document.getElementById("modal-price").textContent = formatPrice(selectedVariant.priceUSD);
     
-    filterProducts();
+    renderProducts();
   }
 
   function closeModal(e) {
@@ -1173,6 +1066,7 @@
     }
   }
 
+  // AGREGADO SILENCIOSO: Añade el ítem y actualiza contador sin abrir el panel lateral del carrito
   function addToCart(id) {
     const p = products.find(x => x.id === id);
     const qty = tempQuantities[id] || 1;
@@ -1193,7 +1087,7 @@
     }
     
     tempQuantities[id] = 1;
-    filterProducts();
+    renderProducts();
     updateCartUI();
   }
 
@@ -1272,7 +1166,7 @@
     document.getElementById("btn-eur").classList.toggle("active", cur === "EUR");
     document.getElementById("btn-cup").classList.toggle("active", cur === "CUP");
     
-    filterProducts();
+    renderProducts();
     updateCartUI();
 
     if (currentModalProductId) {
@@ -1303,8 +1197,9 @@
     window.open(url, "_blank");
   }
 
-  filterProducts();
+  renderProducts();
   updateCartUI();
 </script>
 </body>
 </html>
+
