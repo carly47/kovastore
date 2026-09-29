@@ -11,7 +11,7 @@
   
   <style>
     /* ==========================================================================
-       1. VARIABLES Y ESTILOS GLOBALES (MODO CLARO POR DEFECTO)
+       1. VARIABLES Y ESTILOS GLOBALES
        ========================================================================== */
     :root {
       --primary-color: #0f172a;
@@ -34,7 +34,6 @@
       --transition: all 0.3s ease;
     }
 
-    /* DETECCIÓN AUTOMÁTICA DE MODO OSCURO SEGÚN PREFERENCIA DEL TELÉFONO/SISTEMA */
     @media (prefers-color-scheme: dark) {
       :root {
         --primary-color: #0a0a0a;
@@ -150,12 +149,12 @@
     }
 
     /* ==========================================================================
-       3. BANNER HERO CON CARRUSEL DE TRANSICIÓN
+       3. BANNER HERO
        ========================================================================== */
     .hero {
       position: relative;
       width: 100%;
-      min-height: 70vh;
+      min-height: 50vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -225,22 +224,56 @@
     }
 
     /* ==========================================================================
-       4. BUSCADOR Y FILTROS
+       4. CONTROLES, NAVEGACIÓN DE SECCIONES Y BUSCADOR
        ========================================================================== */
     .controls-section {
       max-width: 1280px;
       margin: 0 auto 2rem;
       padding: 0 1.5rem;
       display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* BOTONES DE SECCIONES / CATEGORÍAS */
+    .category-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
       flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: space-between;
+    }
+
+    .tab-btn {
+      padding: 10px 22px;
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      color: var(--text-main);
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
       align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    .tab-btn.active {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border-color: var(--accent-color);
+      box-shadow: var(--shadow-sm);
     }
 
     .search-box {
-      flex: 1;
-      min-width: 280px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
       position: relative;
     }
 
@@ -270,7 +303,7 @@
     }
 
     /* ==========================================================================
-       5. CATÁLOGO DE PRODUCTOS (GRID Y TARJETAS)
+       5. CATÁLOGO DE PRODUCTOS
        ========================================================================== */
     .catalog-container {
       max-width: 1280px;
@@ -318,8 +351,19 @@
       transition: var(--transition);
     }
 
-    .card:hover .card-img-wrapper img {
-      transform: scale(1.05);
+    .card-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--primary-color);
+      color: var(--accent-color);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1px solid var(--accent-color);
     }
 
     .card-content {
@@ -515,22 +559,11 @@
       display: block;
     }
 
-    /* ==========================================================================
-       7. RESPONSIVE
-       ========================================================================== */
     @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2.2rem;
-      }
-      .hero-tagline {
-        font-size: 1.1rem;
-      }
-      .controls-section {
-        flex-direction: column;
-      }
-      .search-box {
-        width: 100%;
-      }
+      .hero h1 { font-size: 2.2rem; }
+      .hero-tagline { font-size: 1.1rem; }
+      .category-tabs { gap: 0.5rem; }
+      .tab-btn { padding: 8px 16px; font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -553,7 +586,7 @@
     </div>
   </header>
 
-  <!-- BANNER PRINCIPAL / PORTADA CON TRANSICIÓN -->
+  <!-- BANNER PRINCIPAL / PORTADA -->
   <section class="hero">
     <div class="hero-slider">
       <div class="hero-slide active" style="background-image: url('img/portada.jpg');"></div>
@@ -567,15 +600,30 @@
     </div>
   </section>
 
-  <!-- BUSCADOR Y CONTROLES -->
+  <!-- BUSCADOR Y PESTAÑAS DE SECCIONES -->
   <section class="controls-section">
+    <div class="category-tabs">
+      <button class="tab-btn active" data-category="todos">
+        <i class="fa-solid fa-border-all"></i> Todos
+      </button>
+      <button class="tab-btn" data-category="hombre">
+        <i class="fa-solid fa-mars"></i> Hombre
+      </button>
+      <button class="tab-btn" data-category="mujer">
+        <i class="fa-solid fa-venus"></i> Mujer
+      </button>
+      <button class="tab-btn" data-category="unisex">
+        <i class="fa-solid fa-venus-mars"></i> Unisex
+      </button>
+    </div>
+
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="Buscar por perfume inspirador o nombre de referencia...">
+      <input type="text" id="searchInput" placeholder="Buscar por perfume inspirador o referencia...">
     </div>
   </section>
 
-  <!-- CATÁLOGOS DE PRODUCTOS -->
+  <!-- CATÁLOGO DE PRODUCTOS -->
   <main class="catalog-container">
     <div class="catalog-grid" id="catalogGrid"></div>
   </main>
@@ -586,9 +634,7 @@
       <h3>Tu Carrito</h3>
       <button class="close-cart" id="closeCart"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <div class="cart-body" id="cartItems">
-      <!-- Los elementos del carrito se generan dinámicamente -->
-    </div>
+    <div class="cart-body" id="cartItems"></div>
     <div class="cart-footer">
       <div class="cart-total">
         <span>Total:</span>
@@ -602,16 +648,17 @@
 
   <div class="overlay" id="overlay"></div>
 
-  <!-- SCRIPT CON LÓGICA Y DATOS -->
+  <!-- SCRIPT DE LÓGICA Y DATOS -->
   <script>
     /* ==========================================================================
-       DATOS DE PRODUCTOS
+       DATOS DE PRODUCTOS CON CATEGORÍA (HOMBRE, MUJER, UNISEX)
        ========================================================================== */
     const products = [
       { 
         id: 1,  
         name: "1 Million", 
         ref: "Gold Digger", 
+        category: "hombre",
         img: "img/img-002.png", 
         desc: "Una fragancia audaz con notas amaderadas y toques de cuero y especias, perfecta para destacar en la noche.",
         variants: [
@@ -623,6 +670,7 @@
         id: 2,  
         name: "Tom Ford F'n Fabulous", 
         ref: "F'n Marvelous", 
+        category: "unisex",
         img: "img/img-003.png", 
         desc: "Un aroma cuero-oriental sofisticado y exclusivo, enriquecido con almendra amarga y haba tonka.",
         variants: [
@@ -634,6 +682,7 @@
         id: 3,  
         name: "Sauvage Elixir", 
         ref: "Savage Spell", 
+        category: "hombre",
         img: "img/img-004.png", 
         desc: "Concentración extraordinaria de notas especiadas, lavanda fresca y un fondo de maderas ricas.",
         variants: [
@@ -645,6 +694,7 @@
         id: 4,  
         name: "Christian Clive Blonde Amber", 
         ref: "Goldie Luxe", 
+        category: "unisex",
         img: "img/goldie_luxe.jpg", 
         desc: "Ámbar cálido, notas frutales y un toque de ron que evocan elegancia atemporal.",
         variants: [
@@ -656,6 +706,7 @@
         id: 5,  
         name: "Creed Queen of Silk", 
         ref: "Sew Over You", 
+        category: "mujer",
         img: "img/sew_over_you.jpg", 
         desc: "Una esencia envolvente con flores blancas, vainilla suave y notas amaderadas delicadas.",
         variants: [
@@ -667,6 +718,7 @@
         id: 6,  
         name: "YSL Libre", 
         ref: "Libre-Ate Me", 
+        category: "mujer",
         img: "img/img-005.png", 
         desc: "El equilibrio perfecto entre la lavanda francesa y la flor de azahar marroquí.",
         variants: [
@@ -678,6 +730,7 @@
         id: 7,  
         name: "JPG Le Male Elixir", 
         ref: "Alpha Elixir", 
+        category: "hombre",
         img: "img/alpha_elixir.jpg", 
         desc: "Intenso y sensual con notas dulces de haba tonka, menta fresca y benjuí.",
         variants: [
@@ -689,6 +742,7 @@
         id: 8,  
         name: "Tom Ford Electric Cherry", 
         ref: "Cherry Spark", 
+        category: "unisex",
         img: "img/img-006.png", 
         desc: "Cereza ácida combinada con jazmín dulce y pimienta rosada vibrante.",
         variants: [
@@ -700,6 +754,7 @@
         id: 9,  
         name: "Bleu de Chanel", 
         ref: "Azure Depth", 
+        category: "hombre",
         img: "img/img-007.png", 
         desc: "Una fragancia aromática y amaderada de carácter independiente y elegante.",
         variants: [
@@ -711,6 +766,7 @@
         id: 10, 
         name: "Azzaro Most Wanted", 
         ref: "Wanted Dead or Adored", 
+        category: "hombre",
         img: "img/img-010.png", 
         desc: "Un aroma amaderado oriental de alta intensidad con cardamomo, toffee y madera de ámbar.",
         variants: [
@@ -722,6 +778,7 @@
         id: 11, 
         name: "YSL Y", 
         ref: "Why Not", 
+        category: "hombre",
         img: "img/img-011.png", 
         desc: "Aroma fresco y profundo con notas de bergamota, salvia y madera de cedro.",
         variants: [
@@ -733,6 +790,7 @@
         id: 12, 
         name: "JPG Ultra Male", 
         ref: "Alpha Noir", 
+        category: "hombre",
         img: "img/img-012.png", 
         desc: "Una explosión de pera dulce, lavanda negra y vainilla amaderada.",
         variants: [
@@ -744,6 +802,7 @@
         id: 13, 
         name: "Viktor Rolf Spicebomb Extreme", 
         ref: "Spice to Meet You", 
+        category: "hombre",
         img: "img/img-013.png", 
         desc: "Combinación explosiva de especias cálidas, comino, canela y tabaco rico.",
         variants: [
@@ -755,6 +814,7 @@
         id: 14, 
         name: "Tom Ford Ombré Leather", 
         ref: "Leather Late Than Never", 
+        category: "unisex",
         img: "img/img-014.png", 
         desc: "Cuero texturizado, cardamomo y jazmín que proyectan libertad y profundidad.",
         variants: [
@@ -766,6 +826,7 @@
         id: 15, 
         name: "Born in Roma Intense", 
         ref: "When in Roma", 
+        category: "hombre",
         img: "img/img-015.png", 
         desc: "Un homenaje moderno con notas de vainilla magnética y jazmín solar.",
         variants: [
@@ -777,6 +838,7 @@
         id: 17, 
         name: "Ex Nihilo Blue Talisman", 
         ref: "Ya Blue Me Away", 
+        category: "unisex",
         img: "img/img-017.png", 
         desc: "Pera, bergamota, flor de azahar y maderas que crean un amuleto olfativo único.",
         variants: [
@@ -788,6 +850,7 @@
         id: 18, 
         name: "Acqua di Giò Profumo", 
         ref: "Holy Ship You Clean Up Nice", 
+        category: "hombre",
         img: "img/holy_ship.jpg", 
         desc: "Frescura marina combinada con la profundidad del incienso y el pachulí.",
         variants: [
@@ -799,6 +862,7 @@
         id: 19, 
         name: "Miss Dior", 
         ref: "Cherry On Top", 
+        category: "mujer",
         img: "img/cherry_on_top.jpg", 
         desc: "Un bouquet floral elegante con notas de rosa de Grasse, peonía y un toque fresco y romántico.",
         variants: [
@@ -809,6 +873,7 @@
         id: 20, 
         name: "Tom Ford Tobacco Vanille", 
         ref: "Cigars & Ice Cream", 
+        category: "unisex",
         img: "img/cigars_ice_cream.jpg", 
         desc: "Una opulenta mezcla de hoja de tabaco, especias aromáticas, vainilla dulce y cacao suave.",
         variants: [
@@ -819,6 +884,7 @@
         id: 21, 
         name: "YSL MYSLF", 
         ref: "Eternal Bergamot", 
+        category: "hombre",
         img: "img/eternal_bergamot.jpg", 
         desc: "Una fragancia floral-amaderada moderna centrada en la bergamota fresca y la flor de azahar.",
         variants: [
@@ -829,6 +895,7 @@
         id: 22, 
         name: "Paco Rabanne Invictus", 
         ref: "Exor", 
+        category: "hombre",
         img: "img/exor.jpg", 
         desc: "Aroma fresco y vibrante con acorde marino, pomelo radiante y un fondo de madera de gualaco.",
         variants: [
@@ -839,6 +906,7 @@
         id: 23, 
         name: "Louis Vuitton Ombre Nomade", 
         ref: "Incense Oud", 
+        category: "unisex",
         img: "img/incense_oud.jpg", 
         desc: "Un viaje sensorial intenso cargado de madera de Oud, lágrimas de incienso y toques de frambuesa.",
         variants: [
@@ -849,6 +917,7 @@
         id: 24, 
         name: "Versace Eros", 
         ref: "Mint Ocean", 
+        category: "hombre",
         img: "img/mint_ocean.jpg", 
         desc: "Una explosión de frescura con menta, manzana verde y limón italiano respaldados por haba tonka.",
         variants: [
@@ -858,12 +927,14 @@
     ];
 
     /* ==========================================================================
-       ESTADO DEL CARRITO Y LÓGICA DE LA APLICACIÓN
+       ESTADO Y LÓGICA DE FILTRADO COMBINADO
        ========================================================================== */
     let cart = [];
+    let currentCategory = 'todos';
 
     const catalogGrid = document.getElementById('catalogGrid');
     const searchInput = document.getElementById('searchInput');
+    const tabButtons = document.querySelectorAll('.tab-btn');
     const cartToggle = document.getElementById('cartToggle');
     const closeCart = document.getElementById('closeCart');
     const cartDrawer = document.getElementById('cartDrawer');
@@ -873,10 +944,9 @@
     const cartTotalUSD = document.getElementById('cartTotalUSD');
     const sendWhatsApp = document.getElementById('sendWhatsApp');
 
-    // LÓGICA DEL CARRUSEL EN LA PORTADA
+    // CARRUSEL
     let currentSlide = 0;
     const slides = document.querySelectorAll('.hero-slide');
-    
     function nextSlide() {
       if(slides.length > 0) {
         slides[currentSlide].classList.remove('active');
@@ -886,11 +956,26 @@
     }
     setInterval(nextSlide, 5000);
 
-    // RENDERIZAR TARJETAS DE PRODUCTOS
+    // FUNCIÓN PRINCIPAL DE FILTRADO (CATEGORÍA + BÚSQUEDA A LA VEZ)
+    function filterProducts() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+
+      const filtered = products.filter(product => {
+        const matchesCategory = (currentCategory === 'todos') || (product.category === currentCategory);
+        const matchesSearch = product.ref.toLowerCase().includes(searchTerm) || 
+                              product.name.toLowerCase().includes(searchTerm);
+
+        return matchesCategory && matchesSearch;
+      });
+
+      renderProducts(filtered);
+    }
+
+    // RENDERIZAR PRODUCTOS EN PANTALLA
     function renderProducts(items) {
       catalogGrid.innerHTML = '';
       if (items.length === 0) {
-        catalogGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No se encontraron perfumes que coincidan con la búsqueda.</p>`;
+        catalogGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No se encontraron perfumes en esta categoría o búsqueda.</p>`;
         return;
       }
 
@@ -903,6 +988,7 @@
         card.className = 'card';
         card.innerHTML = `
           <div class="card-img-wrapper">
+            <span class="card-tag">${product.category}</span>
             <img src="${product.img}" alt="${product.ref}" onerror="this.src='https://via.placeholder.com/300x300?text=Perfume'">
           </div>
           <div class="card-content">
@@ -923,7 +1009,20 @@
       });
     }
 
-    // AGREGAR PRODUCTO AL CARRITO (SIN ABRIR EL CARRITO AUTOMÁTICAMENTE)
+    // EVENTOS DE PESTAÑAS (CATEGORÍAS)
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        filterProducts();
+      });
+    });
+
+    // EVENTO DE BÚSQUEDA
+    searchInput.addEventListener('input', filterProducts);
+
+    // LÓGICA DEL CARRITO DE COMPRAS
     window.addToCart = function(productId) {
       const product = products.find(p => p.id === productId);
       const variantSelect = document.getElementById(`variant-${productId}`);
@@ -945,11 +1044,9 @@
           quantity: 1
         });
       }
-
       updateCart();
     };
 
-    // ELIMINAR O CAMBIAR CANTIDADES
     window.removeFromCart = function(index) {
       cart.splice(index, 1);
       updateCart();
@@ -963,7 +1060,6 @@
       updateCart();
     };
 
-    // ACTUALIZAR VISTA DEL CARRITO
     function updateCart() {
       cartItems.innerHTML = '';
       let totalUSD = 0;
@@ -994,7 +1090,6 @@
       cartCount.textContent = totalCount;
       cartTotalUSD.textContent = `$${totalUSD} USD`;
 
-      // GENERAR MENSAJE PARA WHATSAPP
       if (cart.length > 0) {
         let message = "Hola! Quisiera realizar el siguiente pedido en *KOVA Essentials*:%0A%0A";
         cart.forEach(item => {
@@ -1007,7 +1102,6 @@
       }
     }
 
-    // CONTROL DEL DRAWER DEL CARRITO
     function openCartDrawer() {
       cartDrawer.classList.add('open');
       overlay.classList.add('active');
@@ -1021,16 +1115,6 @@
     cartToggle.addEventListener('click', openCartDrawer);
     closeCart.addEventListener('click', closeCartDrawer);
     overlay.addEventListener('click', closeCartDrawer);
-
-    // FILTRO DE BÚSQUEDA
-    searchInput.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase().trim();
-      const filtered = products.filter(p => 
-        p.ref.toLowerCase().includes(term) || 
-        p.name.toLowerCase().includes(term)
-      );
-      renderProducts(filtered);
-    });
 
     // INICIALIZACIÓN
     document.addEventListener('DOMContentLoaded', () => {
